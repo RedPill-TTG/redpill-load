@@ -43,7 +43,7 @@ if [ $# -lt 2 ] || [ $# -gt 3 ]; then
 fi
 BRP_HW_PLATFORM="$1"
 BRP_SW_VERSION="$2"
-BRP_OUTPUT_FILE="${3:-"$PWD/redpill-${BRP_HW_PLATFORM}_${BRP_SW_VERSION}_b$(date '+%s').img"}"
+BRP_OUTPUT_FILE="${3:-"$PWD/images/redpill-${BRP_HW_PLATFORM}_${BRP_SW_VERSION}_b$(date '+%s').img"}"
 
 BRP_REL_CONFIG_BASE="$PWD/config/${BRP_HW_PLATFORM}/${BRP_SW_VERSION}"
 BRP_REL_CONFIG_JSON="${BRP_REL_CONFIG_BASE}/config.json"

@@ -2,6 +2,8 @@ scratchpad/
 build/
 cache/
 !cache/.gitkeep
+images/
+!images/.gitkeep
 /user_config.json
 /user_config*.json
 email.patch
