@@ -69,8 +69,9 @@
     },
 
     "menu_entries": {
-      "RedPill DS918+ v6.2.4-25556 (Verbose)": {
+      "RedPill DS918+ v6.2.4-25556 (USB, Verbose)": {
         "options": [
+          "savedefault",
           "set root=(hd0,msdos1)",
           "echo Loading Linux...",
           "linux /zImage @@@CMDLINE@@@",

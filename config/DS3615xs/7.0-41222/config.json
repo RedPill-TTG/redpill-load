@@ -64,18 +64,33 @@
       "earlycon": "uart8250,io,0x3f8,115200n8"
     },
     "menu_entries": {
-      "RedPill DS3615xs v7.0-41222 Beta (Verbose)": {
+      "RedPill DS3615xs v7.0-41222 Beta (USB, Verbose)": {
         "options": [
           "set root=(hd0,msdos1)",
           "echo Loading Linux...",
           "linux /zImage @@@CMDLINE@@@",
           "echo Loading initramfs...",
           "initrd /rd.gz",
-          "echo Starting kernel"
+          "echo Starting kernel with USB boot"
         ],
         "cmdline": {
           "earlyprintk": null,
           "loglevel": 15
+        }
+      },
+      "RedPill DS3615xs v7.0-41222 Beta (SATA, Verbose)": {
+        "options": [
+          "set root=(hd0,msdos1)",
+          "echo Loading Linux...",
+          "linux /zImage @@@CMDLINE@@@",
+          "echo Loading initramfs...",
+          "initrd /rd.gz",
+          "echo Starting kernel with SATA boot"
+        ],
+        "cmdline": {
+          "earlyprintk": null,
+          "loglevel": 15,
+          "synoboot_satadom": 1
         }
       }
     }
