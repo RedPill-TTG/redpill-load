@@ -95,5 +95,6 @@ and potentially removed after init finishes (which is in fact [what prompted tha
 We ask the same question... it was a huge mistake, leading to spaghetti code. But when we realized it was a mistake it 
 was too late to scrap everything and start from scratch. Consider this version an MVP.
 
-We will most likely rewrite it in Python or PHP, as both of these are easily installable or already available in 
-modern-ish versions in distros.
+We will most definitely rewrite it in Python or PHP, as both of these are easily installable or already available in 
+modern-ish versions in distros. With the introduction of the extensions manager the spaghettiness of the code reached a
+new level as reusability is not exactly a thing in BASH (and attempts to simulate exceptions are disastrous).
