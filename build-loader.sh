@@ -357,7 +357,7 @@ fi
 # Handle debug flags for custom ramdisk
 if [ "${BRP_DEV_DISABLE_RP}" -eq 1 ]; then
   pr_warn "<DEV> Disabling RedPill LKM"
-  "${MV_PATH}" "${BRP_URD_DIR}/usr/lib/modules/rp.ko" "${BRP_URD_DIR}/usr/lib/modules/rp-dis.ko" \
+  "${MV_PATH}" "${BRP_CUSTOM_DIR}/usr/lib/modules/rp.ko" "${BRP_CUSTOM_DIR}/usr/lib/modules/rp-dis.ko" \
     || pr_crit "Failed to move RedPill LKM - did you forget to copy it in platform config?"
 fi
 
