@@ -4,3 +4,4 @@ cache/
 !cache/.gitkeep
 /user_config.json
 /user_config*.json
+email.patch
