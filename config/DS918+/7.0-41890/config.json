@@ -58,7 +58,7 @@
       "syno_hdd_powerup_seq": 1,
       "HddHotplug": 0,
       "vender_format_version": 2,
-      "console": "ttyS2,115200n8",
+      "console": "ttyS0,115200n8",
       "withefi": null,
       "elevator": "elevator",
       "syno_port_thaw": 1,
