@@ -20,6 +20,10 @@ BRP_KEEP_BUILD=${BRP_KEEP_BUILD:-''} # will be set to 1 for repack method or 0 f
 BRP_LINUX_PATCH_METHOD=${BRP_LINUX_PATCH_METHOD:-"direct"} # how to generate kernel image (direct bsp patch vs repack)
 BRP_LINUX_SRC=${BRP_LINUX_SRC:-''} # used for repack method
 BRP_BOOT_IMAGE=${BRP_BOOT_IMAGE:-"$PWD/ext/boot-image-template.img.gz"} # gz-ed "template" image to base final image on
+
+# The options below are meant for debugging only. Setting them will create an image which is not normally usable
+BRP_DEV_DISABLE_RP=${BRP_DEV_DISABLE_RP:-0} # when set to 1 the rp.ko will be renamed to rp-dis.ko
+BRP_DEV_DISABLE_SB=${BRP_DEV_DISABLE_SB:-0} # when set to 1 the synobios.ko will be renamed to synobios-dis.ko
 ########################################################################################################################
 
 
@@ -225,6 +229,18 @@ if [ ! -f "${BRP_RD_REPACK}" ]; then # do we even need to unpack-modify-repack t
   # Copy any extra files
   brp_cp_from_list "${BRP_REL_CONFIG_JSON}" "extra.ramdisk_copy" "${BRP_REL_CONFIG_BASE}" "${BRP_URD_DIR}"
   brp_cp_from_list "${BRP_USER_CFG}" "ramdisk_copy" '' "${BRP_URD_DIR}" # no src prefix => user can use absolute paths
+
+  # Handle debug flags
+  if [ "${BRP_DEV_DISABLE_RP}" -eq 1 ]; then
+    pr_warn "<DEV> Disabling RedPill LKM"
+    "${MV_PATH}" "${BRP_URD_DIR}/usr/lib/modules/rp.ko" "${BRP_URD_DIR}/usr/lib/modules/rp-dis.ko" \
+      || pr_crit "Failed to move RedPill LKM"
+  fi
+  if [ "${BRP_DEV_DISABLE_SB}" -eq 1 ]; then
+      pr_warn "<DEV> Disabling mfgBIOS LKM"
+      "${MV_PATH}" "${BRP_URD_DIR}/usr/lib/modules/synobios.ko" "${BRP_URD_DIR}/usr/lib/modules/synobios-dis.ko" \
+        || pr_crit "Failed to move mfgBIOS LKM"
+    fi
 
   # Finally, we can finish ramdisk modifications with repacking it
   readonly BRP_RD_COMPRESSED=$(brp_json_get_field "${BRP_REL_CONFIG_JSON}" "extra.compress_rd")
