@@ -293,7 +293,7 @@ rpt_download_remote()
 {
     pr_info "Downloading remote file %s to %s" "${1}" "${2}"
     local out;
-    out=$("${CURL_PATH}" --fail --progress-bar --retry 5 --output "${2}" "${1}")
+    out=$("${CURL_PATH}" --location --fail --progress-bar --retry 5 --output "${2}" "${1}")
     if [ $? -ne 0 ]; then
       if [[ "${3}" -eq 1 ]]; then
         pr_crit "Failed to download %s to %s\n\n%s" "${1}" "${2}" "${out}"
