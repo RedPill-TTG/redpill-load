@@ -76,7 +76,7 @@
           "linux /zImage @@@CMDLINE@@@",
           "echo Loading initramfs...",
           "initrd /rd.gz",
-          "echo Starting kernel"
+          "echo Starting kernel with USB boot"
         ],
         "cmdline": {
           "earlyprintk": null,
