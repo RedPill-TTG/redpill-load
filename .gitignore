@@ -8,3 +8,5 @@ images/
 /user_config*.json
 email.patch
 .idea/
+ext/rp-lkm/
+!ext/rp-lkm/.gitkeep
