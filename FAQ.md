@@ -30,6 +30,46 @@ of now it's a low priority bug.
 ## Boot stops at `clocksource: Switched to clocksource tsc`
 Wait, on some systems it may take ~30s to progress.
 
+## Early kernel panic with "No filesystem could mount root"
+If you get something like this while running in virtualized environment:
+```
+[....] RAMDISK: lzma image found at block 0
+[....] tsc: Refined TSC clocksource calibration: 3292.538 MHz
+[....] Switching to clocksource tsc
+[....] RAMDISK: EOF while reading compressed data
+[....] unexpected EOF
+[....] EXT3-fs (md0): error: unable to read superblock
+[....] EXT2-fs (md0): error: unable to read superblock
+[....] EXT4-fs (md0): unable to read superblock
+[....] List of all partitions:
+[....] 0860          131072 sdg  driver: sd
+[....]   0861           49152 sdg1 f110ee87-01
+[....]   0862           76800 sdg2 f110ee87-02
+[....]   0863            4096 sdg3 f110ee87-03
+[....] 0870        33554432 sdh  driver: sd
+[....] No filesystem could mount root, tried:  ext3 ext2 ext4
+[....] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(9,0)
+```
+
+You should know this is a bug somewhere between host kernel and hypervisor. This is intermittent and usually happens 
+when you try to quickly power-cycle (using ACPI reset) the VM. It's nothing specific to this loader and happens with
+other OSes too. We weren't able to isolate the cause. The fix is simple - stop the VM, wait 5-10 second and start it 
+again. Magically the problem will solve itself.
+
+If it doesn't go away make sure to read the log up carefully as you may have e.g. initramfs unpack bug (see below).
+
+
+## Initramfs cannot be unpacked
+If during boot you get something like log below:
+
+```
+[....] Trying to unpack rootfs image as initramfs...
+[....] decompress cpio completed and skip redundant lzma
+[....] rootfs image is not initramfs (unexpected EOF); looks like an initrd
+```
+
+If you've just added a new platform you just stepped into a [known syno kernels bug](https://github.com/RedPill-TTG/dsm-research/blob/master/quirks/ramdisk-checksum.md#recreating-ramdisks).
+You need to generate CPIO instead of LZMA ramdisks (see [`FOR_DEVS.md`](FOR_DEVS.md) for details) for this OS version.
 
 ## Misc
 ### Why is this written in BASH?!
