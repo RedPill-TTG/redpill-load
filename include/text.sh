@@ -16,3 +16,13 @@ function brp_array_to_text()
 
   echo "${text}"
 }
+
+# Converts delimiter-separated text into bash array
+#
+# Args: $1 separator | $2 text | $3 array to write to
+rpt_text_to_array()
+{
+  # readarray would be better but BASH 4.3 doesn't support delimiter
+  IFS="${1}"
+  read -r -a $3 <<< "${2}"
+}

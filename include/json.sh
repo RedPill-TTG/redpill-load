@@ -3,7 +3,7 @@ set -uo pipefail
 
 # Validates JSON and exists if invalid
 #
-# Args: $1 file path
+# Args: $1 file path | $2 soft-fail only
 brp_json_validate()
 {
   local jq_out
@@ -13,7 +13,12 @@ brp_json_validate()
     return 0
   fi
 
-  pr_crit "JSON file \"%s\" is invalid:\n\n%s" "$1" "${jq_out}"
+  if [[ ${2: 0} -eq 1 ]]; then
+    pr_err "JSON file \"%s\" is invalid:\n\n%s" "$1" "${jq_out}"
+  else
+    pr_crit "JSON file \"%s\" is invalid:\n\n%s" "$1" "${jq_out}"
+  fi
+  return 1
 }
 
 # Checks if a given key existing in JSON
@@ -47,7 +52,7 @@ brp_json_get_field()
   fi
 }
 
-# Gets a single value of a key or exist on error
+# Gets a list of keys from the object
 #
 # This function GUARANTEES that keys are returned in their order in file
 # Do NOT try to change it to "keys" to support older JQs as it will break other things (e.g. brp_read_ordered_kv)
@@ -75,7 +80,10 @@ brp_json_get_array_values()
 {
   local field_val;
   field_val=$(${JQ_PATH} -e -r ".${2} | .[]" "${1}")
-  if [ $? -eq 0 ] ; then
+  local jq_exit=$?
+
+  # "1 if the last output value was either false or null", 4 if it was empty... we hate it
+  if [[ jq_exit -le 1 ]] || [[ jq_exit -eq 4 ]] ; then
     echo "${field_val}"
     return 0
   fi
@@ -83,6 +91,45 @@ brp_json_get_array_values()
   if [ "${3:-'0'}" != 1 ]; then
     pr_crit "Field \"$2\" doesn't existing in $1"
   fi
+}
+
+# Reads array values and outputs them as a delimiter-separated string
+#
+# Args: $1 file path | $2 field | $3 empty-on-error [default=0] | $4 separator [default=,]
+rpt_json_get_array_values_flat()
+{
+  local -a _entries
+  local _entries_txt
+
+  if [[ -z ${3+x} ]]; then
+    local ignore_err=0
+  else
+    local ignore_err="${3}"
+  fi
+  if [[ -z ${4+x} ]]; then
+    local separator=','
+  else
+    local separator="${4}"
+  fi
+
+  _entries_txt="$(brp_json_get_array_values "${1}" "${2}" "${ignore_err}")"
+  local get_vals_exit=$?
+  if [[ $? -ne 0 ]]; then
+    echo "${_entries_txt}"
+    return 1
+  fi
+
+  readarray -t _entries <<< "${_entries_txt}"
+  _entries_txt=''
+  for entry in ${_entries[@]+"${_entries[@]}"}; do
+    if [[ ! -z "${_entries_txt}" ]]; then
+      _entries_txt+="${separator}"
+    fi
+
+    _entries_txt+="${entry}"
+  done
+
+  echo "${_entries_txt}"
 }
 
 # Check if passed string is "null" or ""
@@ -118,6 +165,7 @@ brp_read_kv_to_array()
     pr_crit "Failed extract K=>V pairs from %s:.%s\n\n%s" "${1}" "${2}" "${out}"
   fi
 
+  # if you get a useless BASH error "invalid arithmetic operator" here check the variable you've passed (it must be -A)
   eval "$out"
 }
 

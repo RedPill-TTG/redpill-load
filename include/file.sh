@@ -29,24 +29,49 @@ brp_expand_var_path()
   echo "${file_path}"
 }
 
+# Computes SHA-256 hash for a file and returns it
+#
+# Args: $1 file path
+rpt_get_file_sha256()
+{
+  pr_dbg "Generating SHA-256 for %s" "${1}"
+
+  local hash;
+  local hash_res;
+  hash=$("${SHA256SUM_PATH}" "${1}" | cut -d ' ' -f1)
+  hash_res=$?
+
+
+  echo "${hash}"
+  return $hash_res
+}
+
 # Validates file
 #
-# Args: $1 file path | $2 expected checksum
+# Args: $1 file path | $2 expected checksum | $3 make failure non-critical [default=0]
 brp_verify_file_sha256()
 {
   pr_process "Verifying %s file" "${1}"
 
   local hash;
-  hash=$("${SHA256SUM_PATH}" "${1}" | cut -d ' ' -f1)
+  hash=$(rpt_get_file_sha256 "${1}")
 
   if [ $? -ne 0 ]; then
     pr_process_err
-    pr_crit "Failed to generate checksum for file\n\n%s" "${hash}"
+    if [[ "${3:-1}" -eq 1 ]]; then
+      pr_err "Failed to generate checksum for file\n\n%s" "${hash}"
+    else
+      pr_crit "Failed to generate checksum for file\n\n%s" "${hash}"
+    fi
   fi
 
   if [ "$2" != "$hash" ]; then
     pr_process_err
-    pr_crit "Checksum mismatch - expected %s but computed %s" "$2" "$hash"
+    if [[ "${3:-1}" -ne 1 ]]; then
+      pr_err "Checksum mismatch - expected %s but computed %s" "$2" "$hash"
+    else
+      pr_crit "Checksum mismatch - expected %s but computed %s" "$2" "$hash"
+    fi
   fi
 
   pr_process_ok
@@ -54,7 +79,7 @@ brp_verify_file_sha256()
 
 # Unpacks tar-like file
 #
-# Args: $1 file path | $2 directory to unpack (must exist)
+# Args: $1 file path | $2 directory to unpack (must exist) | $3 should hard fail on error? [default=1]
 brp_unpack_tar()
 {
   pr_process "Unpacking %s file to %s" "${1}" "${2}"
@@ -63,7 +88,38 @@ brp_unpack_tar()
   output=$("${TAR_PATH}" -xf "${1}" -C "${2}" 2>&1)
   if [ $? -ne 0 ]; then
     pr_process_err
-    pr_crit "Failed to unpack tar\n\n%s" "${output}"
+
+    if [[ "${3:-1}" -ne 1 ]]; then
+      pr_err "Failed to unpack tar\n\n%s" "${output}"
+      return 1
+    else
+      pr_crit "Failed to unpack tar\n\n%s" "${output}"
+    fi
+  fi
+
+  pr_process_ok
+}
+
+# Unpacks tar-like file without any folder structure
+#
+# Args: $1 file path | $2 directory to unpack (must exist) | $3 should hard fail on error? [default=1]
+brp_unpack_tar_flat()
+{
+  pr_process "Unpacking files from %s to %s" "${1}" "${2}"
+
+  local output;
+  # Lovely hack by ford: https://stackoverflow.com/a/14295908
+  #todo: some older tar versions leave empty directories... there's no elegant way to get rid of them ;<
+  output=$("${TAR_PATH}" -xf "${1}" --transform='s/.*\///' -C "${2}" 2>&1)
+  if [ $? -ne 0 ]; then
+    pr_process_err
+
+    if [[ "${3:-1}" -ne 1 ]]; then
+      pr_err "Failed to unpack tar\n\n%s" "${output}"
+      return 1
+    else
+      pr_crit "Failed to unpack tar\n\n%s" "${output}"
+    fi
   fi
 
   pr_process_ok
@@ -179,7 +235,15 @@ brp_unpack_single_gz()
 
 brp_mkdir()
 {
-    "${MKDIR_PATH}" -p "${1}" || pr_crit "Failed to create \"%s\" directory" "${1}"
+  if [[ -d "${1}" ]]; then return 0; fi
+
+  pr_dbg "Creating directory \"%s\"" "${1}"
+  "${MKDIR_PATH}" -p "${1}" || pr_crit "Failed to create \"%s\" directory" "${1}"
+}
+
+rpt_make_executable()
+{
+    "${CHMOD_PATH}" +x "${1}" || pr_crit "Failed to make \"%s\" executable" "${1}"
 }
 
 # Copies files while resolving all symlinks
@@ -190,6 +254,12 @@ brp_cp_flat()
   pr_dbg "Copying %s to %s" "${1}" "${2}"
 
   local out;
+  if [[ "${2: -1}" == '/' ]]; then
+    brp_mkdir "${2}"
+  else
+    brp_mkdir "$("${DIRNAME_PATH}" "${2}")"
+  fi
+
   out="$("${CP_PATH}" --recursive --dereference "${1}" "${2}" 2>&1)"
   if [ $? -ne 0 ]; then
     pr_process_err
@@ -214,4 +284,42 @@ brp_cp_from_list()
   for from in "${!kv_pairs[@]}"; do
     brp_cp_flat "$(brp_expand_var_path "${from}" _path_map)" "${4}/${kv_pairs[$from]}"
   done
+}
+
+# Downloads remote file to a specific file path
+#
+# Args: $1 URL to download from | $2 destination file | $3 hard fail on error [1 to do so]
+rpt_download_remote()
+{
+    pr_info "Downloading remote file %s to %s" "${1}" "${2}"
+    local out;
+    out=$("${CURL_PATH}" --fail --progress-bar --retry 5 --output "${2}" "${1}")
+    if [ $? -ne 0 ]; then
+      if [[ "${3}" -eq 1 ]]; then
+        pr_crit "Failed to download %s to %s\n\n%s" "${1}" "${2}" "${out}"
+      else
+        return 1
+      fi
+    fi
+}
+
+# Lists directories in a path
+#
+# Args: $1 path | $2 array to read to
+rpt_list_directories()
+{
+  local -n __ls_list=$2
+
+  local out;
+  out=$(cd "${1}" && ls -A)
+  if [[ -z "${out}" ]]; then # we need to check if directory contains anything to prevent next ls failure
+    return 0
+  fi
+
+  out=$(cd "${1}" && ls -A -1 -d */ | sed 's^/^^')
+  if [[ $? -ne 0 ]]; then
+    pr_crit "Failed to list directories in %s\n\n%s" "${1}" "${out}"
+  fi
+
+  readarray -t __ls_list <<< "${out}"
 }
