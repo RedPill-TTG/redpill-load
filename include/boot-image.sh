@@ -43,6 +43,9 @@ brp_attach_image()
 # You can call this function multiple times to attach multiple partitions (but calling it twice for the same partition
 # within the same image is seen as an error)
 #
+# On some systems partition scan is slower than "mount" execution. That's why this function will wait up to 3 seconds
+# for the partition to appear.
+#
 # Args: $1 image | $2 partition number | $3 where to create mountpoints
 brp_mount_img_partitions()
 {
@@ -76,6 +79,13 @@ brp_mount_img_partitions()
   else
     brp_mkdir "${mnt_pt}"
   fi
+
+  local i=0;
+  while [ ! -e "${loop_part}" ] && [ $i -lt 3 ]; do
+    ((i+=1))
+    pr_warn "%s is not available (yet?) - waiting 1s [attempt %d/3]" "${loop_part}" $i
+    sleep 1
+  done
 
   out=$("${MOUNT_PATH}" "${loop_part}" "${mnt_pt}")
   if [ $? -ne 0 ]; then
