@@ -16,6 +16,19 @@ brp_json_validate()
   pr_crit "JSON file \"%s\" is invalid:\n\n%s" "$1" "${jq_out}"
 }
 
+# Checks if a given key existing in JSON
+#
+# Args: $1 file path | $2 field
+brp_json_has_field()
+{
+  ${JQ_PATH} -e -r ".$2|select(0)" "$1" &>/dev/null
+  if [[ $? -eq 0 ]]; then
+    echo "1"
+  else
+    echo "0"
+  fi
+}
+
 # Gets a single value of a key or exist on error
 #
 # Args: $1 file path | $2 field | $3 empty-on-error [default=0]

@@ -121,10 +121,15 @@ brp_detach_image()
 # - The main config file is expected to have .grub root key
 # - The user config is expected to have extra_cmdline key
 #
-# Args: $1 main JSON config | $2 user config | $3 main config context dir | $4 destination path
+# Args:
+#   $1 main JSON config
+#   $2 user config
+#   $3 reference to a map of K=>V pairs with variables, see brp_expand_var_path()
+#   $4 GRUB config destination file path
 brp_generate_grub_conf()
 {
   local menu_entries_txt;
+  local -n _path_map=$3
 
   # First get user cmdline overrides
   pr_dbg "Reading user extra_cmdline entries"
@@ -204,6 +209,6 @@ brp_generate_grub_conf()
   pr_dbg "Assembling final grub config in %s" "${4}"
   local template;
   template=$(brp_json_get_field "${1}" 'grub.template')
-  brp_cp_flat "${3}/${template}" "${4}"
+  brp_cp_flat "$(brp_expand_var_path "${template}" _path_map)" "${4}"
   brp_replace_token_with_text "${4}" '@@@MENU_ENTRIES@@@' "${menu_entries_txt}"
 }

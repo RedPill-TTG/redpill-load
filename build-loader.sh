@@ -88,11 +88,29 @@ if [ ! -f "${BRP_REL_CONFIG_JSON}" ]; then
 fi
 brp_json_validate "${BRP_REL_CONFIG_JSON}"
 
+### Here we define some common/well-known paths used later, as well as the map for resolving path variables in configs
 readonly BRP_REL_OS_ID=$(brp_json_get_field "${BRP_REL_CONFIG_JSON}" "os.id")
+readonly BRP_UPAT_DIR="${BRP_BUILD_DIR}/pat-${BRP_REL_OS_ID}-unpacked" # unpacked pat directory
+readonly BRP_EXT_DIR="$PWD/ext" # a directory with external tools/files/modules
+readonly BRP_COMMON_CFG_BASE="$PWD/config/_common" # a directory with common configs & patches sable for many platforms
+readonly BRP_USER_DIR="$PWD/custom"
+# vars map for copying files from release configs. If you're changing this please add to docs!
+typeset -r -A BRP_RELEASE_PATHS=(
+  [@@@_DEF_@@@]="${BRP_REL_CONFIG_BASE}"
+  [@@@PAT@@@]="${BRP_UPAT_DIR}"
+  [@@@COMMON@@@]="${BRP_COMMON_CFG_BASE}"
+  [@@@EXT@@@]="${BRP_EXT_DIR}"
+)
+# vars map for copying files from user config. If you're changing this please add to docs!
+typeset -r -A BRP_USER_PATHS=(
+  [@@@_DEF_@@@]="${BRP_USER_DIR}"
+)
 
 pr_dbg "******** Printing config variables ********"
 pr_dbg "Cache dir: %s" "$BRP_CACHE_DIR"
 pr_dbg "Build dir: %s" "$BRP_BUILD_DIR"
+pr_dbg "Ext dir: %s" "$BRP_EXT_DIR"
+pr_dbg "User custom dir: %s" "$BRP_USER_DIR"
 pr_dbg "User config: %s" "$BRP_USER_CFG"
 pr_dbg "Keep build dir? %s" "$BRP_KEEP_BUILD"
 pr_dbg "Linux patch method: %s" "$BRP_LINUX_PATCH_METHOD"
@@ -101,6 +119,7 @@ pr_dbg "Hardware platform: %s" "$BRP_HW_PLATFORM"
 pr_dbg "Software version: %s" "$BRP_SW_VERSION"
 pr_dbg "Image template: %s" "$BRP_BOOT_IMAGE"
 pr_dbg "Image destination: %s" "$BRP_OUTPUT_FILE"
+pr_dbg "Common cfg base: %s" "$BRP_COMMON_CFG_BASE"
 pr_dbg "Release cfg base: %s" "$BRP_REL_CONFIG_BASE"
 pr_dbg "Release cfg JSON: %s" "$BRP_REL_CONFIG_JSON"
 pr_dbg "Release id: %s" "$BRP_REL_OS_ID"
@@ -108,7 +127,6 @@ pr_dbg "*******************************************"
 
 ##### SYSTEM IMAGE HANDLING ############################################################################################
 readonly BRP_PAT_FILE="${BRP_CACHE_DIR}/${BRP_REL_OS_ID}.pat"
-readonly BRP_UPAT_DIR="${BRP_BUILD_DIR}/pat-${BRP_REL_OS_ID}-unpacked"
 
 if [ ! -d "${BRP_UPAT_DIR}" ]; then
   pr_dbg "Unpacked PAT %s not found - preparing" "${BRP_UPAT_DIR}"
@@ -196,7 +214,7 @@ if [ ! -f "${BRP_RD_REPACK}" ]; then # do we even need to unpack-modify-repack t
   brp_apply_text_patches \
     "${BRP_URD_DIR}" \
     "$(brp_json_get_array_values "${BRP_REL_CONFIG_JSON}" 'patches.ramdisk')" \
-    "${BRP_REL_CONFIG_BASE}"
+    BRP_RELEASE_PATHS
 
   # Now we apply dynamic patches for configs
   # These paths look to be static throughout maaaaany years, so they're not in config file - if needed it's easy to move
@@ -204,14 +222,15 @@ if [ ! -f "${BRP_RD_REPACK}" ]; then # do we even need to unpack-modify-repack t
   readonly BRP_POST_INIT_FILE="${BRP_URD_DIR}/sbin/init.post" # file with @@@CONFIG-MANIPULATORS-TOOLS@@@ and @@@CONFIG-GENERATED@@@
   readonly BRP_RD_CONFS=("${BRP_URD_DIR}/etc/synoinfo.conf" "${BRP_URD_DIR}/etc.defaults/synoinfo.conf") # files to patch in the baked-in ramdisk
   readonly BRP_OS_CONFS=("/tmpRoot/etc/synoinfo.conf" "/tmpRoot/etc.defaults/synoinfo.conf") # paths of files on the OS partition (valid after the RD boots)
+  readonly BRP_USER_HAS_SYNOINFO=$(brp_json_has_field "${BRP_USER_CFG}" 'synoinfo')
 
   # Patch preboot (statically)
   pr_process "Patching config files in ramdisk"
-
-
-
   brp_patch_config_files "${BRP_REL_CONFIG_JSON}" 'synoinfo' "${BRP_RD_CONFS[@]}" # first apply platform changes
-  brp_patch_config_files "${BRP_USER_CFG}" 'synoinfo' "${BRP_RD_CONFS[@]}" # then apply user changes
+
+  if [[ ${BRP_USER_HAS_SYNOINFO} -eq 1 ]]; then
+    brp_patch_config_files "${BRP_USER_CFG}" 'synoinfo' "${BRP_RD_CONFS[@]}" # then apply user changes
+  fi
   pr_process_ok
 
   # Next we need to ensure the same patches are applied to post-boot environment too (dynamically)
@@ -219,16 +238,21 @@ if [ ! -f "${BRP_RD_REPACK}" ]; then # do we even need to unpack-modify-repack t
   BRP_TEMP_ARRAY=(); brp_generate_set_confs_calls \
                      "${BRP_REL_CONFIG_JSON}" 'synoinfo' BRP_TEMP_ARRAY "${BRP_OS_CONFS[@]}" # platform configs
   BRP_OS_CONFS_LINES="$(brp_array_to_text $'\n' "${BRP_TEMP_ARRAY[@]}")"
-  BRP_TEMP_ARRAY=(); brp_generate_set_confs_calls \
-                     "${BRP_USER_CFG}" 'synoinfo' BRP_TEMP_ARRAY "${BRP_OS_CONFS[@]}" # user configs
-  BRP_OS_CONFS_LINES+=$'\n'"$(brp_array_to_text $'\n' "${BRP_TEMP_ARRAY[0]+"${BRP_TEMP_ARRAY[@]}"}")"
+
+  if [[ ${BRP_USER_HAS_SYNOINFO} -eq 1 ]]; then
+    BRP_TEMP_ARRAY=(); brp_generate_set_confs_calls \
+                       "${BRP_USER_CFG}" 'synoinfo' BRP_TEMP_ARRAY "${BRP_OS_CONFS[@]}" # user configs
+    BRP_OS_CONFS_LINES+=$'\n'"$(brp_array_to_text $'\n' "${BRP_TEMP_ARRAY[0]+"${BRP_TEMP_ARRAY[@]}"}")"
+  fi
   brp_replace_token_with_script "${BRP_POST_INIT_FILE}" '@@@CONFIG-MANIPULATORS-TOOLS@@@' "$PWD/include/config-manipulators.sh"
   brp_replace_token_with_text "${BRP_POST_INIT_FILE}" '@@@CONFIG-GENERATED@@@' "${BRP_OS_CONFS_LINES}"
   pr_process_ok
 
-  # Copy any extra files
-  brp_cp_from_list "${BRP_REL_CONFIG_JSON}" "extra.ramdisk_copy" "${BRP_REL_CONFIG_BASE}" "${BRP_URD_DIR}"
-  brp_cp_from_list "${BRP_USER_CFG}" "ramdisk_copy" '' "${BRP_URD_DIR}" # no src prefix => user can use absolute paths
+  # Copy any extra files to the ramdisk
+  brp_cp_from_list "${BRP_REL_CONFIG_JSON}" "extra.ramdisk_copy" BRP_RELEASE_PATHS "${BRP_URD_DIR}"
+  if [[ "$(brp_json_has_field "${BRP_USER_CFG}" 'ramdisk_copy')" -eq 1 ]]; then
+    brp_cp_from_list "${BRP_USER_CFG}" "ramdisk_copy" BRP_USER_PATHS "${BRP_URD_DIR}"
+  fi
 
   # Handle debug flags
   if [ "${BRP_DEV_DISABLE_RP}" -eq 1 ]; then
@@ -266,7 +290,7 @@ fi
 ##### PREPARE GRUB CONFIG ##############################################################################################
 readonly BRP_TMP_GRUB_CONF="${BRP_BUILD_DIR}/grub.cfg"
 pr_process "Generating GRUB config"
-brp_generate_grub_conf "${BRP_REL_CONFIG_JSON}" "${BRP_USER_CFG}" "${BRP_REL_CONFIG_BASE}" "${BRP_TMP_GRUB_CONF}"
+brp_generate_grub_conf "${BRP_REL_CONFIG_JSON}" "${BRP_USER_CFG}" BRP_RELEASE_PATHS "${BRP_TMP_GRUB_CONF}"
 pr_process_ok
 
 ##### CREATE FINAL LOADER IMAGE ########################################################################################
@@ -277,6 +301,21 @@ readonly BRP_OUT_P2="$(brp_mount_img_partitions "${BRP_OUTPUT_FILE}" 2 "${BRP_BU
 readonly BRP_ZLINMOD_NAME="zImage" # name of the linux kernel in the final image
 readonly BRP_RDMOD_NAME="rd.gz" # name of the ramdisk in the final image
 
+# Copy any config-specified extra files
+pr_dbg "Copying extra files"
+brp_cp_from_list "${BRP_REL_CONFIG_JSON}" "extra.bootp1_copy" BRP_RELEASE_PATHS "${BRP_OUT_P1}"
+brp_cp_from_list "${BRP_REL_CONFIG_JSON}" "extra.bootp2_copy" BRP_RELEASE_PATHS "${BRP_OUT_P2}"
+
+# Copy user files to boot partitions
+if [[ "$(brp_json_has_field "${BRP_USER_CFG}" 'bootp1_copy')" -eq 1 ]]; then
+  brp_cp_from_list "${BRP_USER_CFG}" "bootp1_copy" BRP_RELEASE_PATHS "${BRP_OUT_P1}"
+fi
+if [[ "$(brp_json_has_field "${BRP_USER_CFG}" 'bootp2_copy')" -eq 1 ]]; then
+  brp_cp_from_list "${BRP_USER_CFG}" "bootp2_copy" BRP_RELEASE_PATHS "${BRP_OUT_P2}"
+fi
+
+# Add patched zImage, patched ramdisk and our GRUB config
+pr_dbg "Copying patched files"
 brp_cp_flat "${BRP_ZLINUX_PATCHED_FILE}" "${BRP_OUT_P1}/${BRP_ZLINMOD_NAME}"
 brp_cp_flat "${BRP_RD_REPACK}" "${BRP_OUT_P1}/${BRP_RDMOD_NAME}"
 brp_cp_flat "${BRP_TMP_GRUB_CONF}" "${BRP_OUT_P1}/boot/grub/grub.cfg"

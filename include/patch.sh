@@ -38,16 +38,18 @@ brp_apply_binary_patches()
 # Args:
 #   $1 directory
 #   $2 list of NL separated patches (e.g. from brp_json_get_array_values())
-#   $3 base path to find patches (paths in $2 can/should be relative)
+#   $3 reference to a map of K=>V pairs with variables, see brp_expand_var_path()
 brp_apply_text_patches()
 {
+  local -n _path_map=$3
   pr_process "Apply patches to %s" "${1}"
 
   local out;
   for patch_file in ${2}; do
+    patch_file=$(brp_expand_var_path "${patch_file}" _path_map)
     pr_dbg "Applying %s" "${patch_file}"
 
-    out=$("${PATCH_PATH}" -p1 -d "${1}" <"${3}/${patch_file}" 2>&1)
+    out=$("${PATCH_PATH}" -p1 -d "${1}" <"${patch_file}" 2>&1)
     if [ $? -ne 0 ]; then
       pr_crit "One of the patches - %s - failed to apply\n\n%s" "${patch_file}" "${out}"
     fi

@@ -1,6 +1,34 @@
 #!/usr/bin/env bash
 set -u
 
+# Resolves array relative path to a file
+#
+# Args:
+#   $1 raw file path
+#   $2 reference to a K=>V map of variables; it should contain "@@@_DEF_@@@" entry for non-variabled paths
+brp_expand_var_path()
+{
+  local -n __vars_map=$2
+  local file_path="${1}"
+
+  if [[ "${1}" == /* ]]; then
+    : #noop, absolute paths don't need any modifications
+  elif [[ "${1}" != @@@* ]]; then
+    # since path doesn't begin with a variable we just assume the default
+    file_path="${__vars_map[@@@_DEF_@@@]}/${file_path}"
+  else
+    local var_value
+    for var_name in "${!__vars_map[@]}"
+    do
+      var_value="${__vars_map[$var_name]}"
+      file_path="${file_path/${var_name}/${var_value}}"
+    done
+  fi
+
+  pr_dbg "Resolved path '${1}' to '${file_path}'"
+  echo "${file_path}"
+}
+
 # Validates file
 #
 # Args: $1 file path | $2 expected checksum
@@ -171,14 +199,19 @@ brp_cp_flat()
 
 # Copies all files from K=>V list in JSON, resolving all symlinks with flat copy
 #
-# Args: $1 JSON config file | $2 key containing SRC=>DST pairs | $3 src prefix | $4 dst prefix
+# Args:
+#   $1 JSON config file
+#   $2 key containing SRC=>DST pairs
+#   $3 reference to a map of K=>V pairs with variables for source resolution, see brp_expand_var_path()
+#   $4 dst prefix
 brp_cp_from_list()
 {
+  local -n _path_map=$3
   pr_dbg "Mass copying files from entries in %s:.%s" "${1}" "${2}"
 
   local -A kv_pairs;
   brp_read_kv_to_array "${1}" "${2}" kv_pairs
   for from in "${!kv_pairs[@]}"; do
-    brp_cp_flat "${3}/${from}" "${4}/${kv_pairs[$from]}"
+    brp_cp_flat "$(brp_expand_var_path "${from}" _path_map)" "${4}/${kv_pairs[$from]}"
   done
 }
