@@ -1,0 +1,28 @@
+--- a/linuxrc.syno
++++ b/linuxrc.syno
+@@ -3,6 +3,8 @@
+ 
+ echo "START /linuxrc.syno"
+ 
++insmod /usr/lib/modules/rp.ko && rm /usr/lib/modules/rp.ko
++
+ . /etc.defaults/rc.subr
+ 
+ Mnt="/tmpRoot"
+@@ -131,6 +133,7 @@
+ # insert basic USB modules for detect f401/FDT
+ echo "Insert basic USB modules..."
+ SYNOLoadModules $USB_MODULES
++SYNOLoadModules "usb-storage"
+ 
+ # insert Etron USB3.0 drivers
+ 
+@@ -237,7 +239,7 @@
+ fi
+ if [ "$UniqueRD" = "kvmx64" -o \
+ 		"$UniqueRD" = "nextkvmx64" -o \
+-		"$UniqueRD" = "kvmcloud" ]; then
++		"$UniqueRD" = "kvmcloud" ] || (dmesg | grep -q "DMI"); then
+ 	insmod /lib/modules/virtio.ko
+ 	insmod /lib/modules/virtio_ring.ko
+ 	insmod /lib/modules/virtio_pci.ko

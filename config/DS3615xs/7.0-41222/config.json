@@ -1,0 +1,99 @@
+{
+  "os": {
+    "id": "ds3615xs_41222",
+    "pat_url": "https://cndl.synology.cn/download/DSM/beta/7.0/41222/DSM_DS3615xs_41222.pat",
+    "sha256": "fe3ce1a783d3fdf86e01810658da3e1a4f563560129b988cf0036a052c8dc891"
+  },
+
+  "files": {
+    "zlinux": {
+      "name": "zImage",
+      "sha256": "fe50f8b5a4cd263398e95f33dea08b4d568ef43f7aa22c808ddc2b86c3c2d90b"
+    },
+    "ramdisk": {
+      "name": "rd.gz",
+      "sha256": "bdde82e6b79048a860349abe566424ee00c731e00f28e0b4532b427132c14c1a"
+    },
+    "vmlinux": {
+      "sha256": "bde76a39a6f769dc6f209bf22fba4f7530a3dad41431d44a07ea42c389897068"
+    }
+  },
+
+  "patches": {
+    "_comment": ".bsp patches are applied to FILES using bspatch(1); .patch are applied to DIRECTORIES using patch(1)",
+    "zlinux": [
+      "zImage-001-3615xs-41222-ramdisk-and-header.bsp"
+    ],
+    "ramdisk": [
+      "ramdisk-001-disable-root-pwd.patch",
+      "ramdisk-002-init-script.patch",
+      "ramdisk-003-post-init-script.patch"
+    ]
+  },
+  "synoinfo": {
+    "supportadt7490": "",
+    "maxdisks": "15",
+    "internalportcfg": "0x78FF",
+    "esataportcfg": "0x0",
+    "usbportcfg": "0x8700",
+    "rss_server": "http://example.com/null.xml",
+    "rss_server_ssl": "https://example.com/null.xml",
+    "small_info_path": "https://example.com/null",
+    "updateurl": "http://example.com/",
+    "myds_region_api_base_url": "https://example.com"
+  },
+  "grub": {
+    "template": "grub-template.conf",
+    "base_cmdline": {
+      "sn": "",
+      "vid": "0x46f4",
+      "pid": "0x0001",
+      "mac1": "",
+      "netif_num": 1,
+
+      "syno_hw_version": "DS3615xs",
+      "syno_hdd_powerup_seq": 0,
+      "HddHotplug": 0,
+      "vender_format_version": 2,
+      "console": "ttyS0,115200n8",
+      "withefi": null,
+      "elevator": "elevator",
+      "syno_port_thaw": 1,
+      "syno_hdd_detect": 0,
+      "root": "/dev/md0",
+      "earlycon": "uart8250,io,0x3f8,115200n8"
+    },
+    "menu_entries": {
+      "RedPill DS3615xs v7.0-41222 (UNSTABLE BETA) Kagamine": {
+        "options": [
+          "set root=(hd0,msdos1)",
+          "echo Loading Linux...",
+          "linux /zImage @@@CMDLINE@@@",
+          "echo Loading initramfs...",
+          "initrd /rd.gz",
+          "echo Starting kernel"
+        ],
+        "cmdline": {
+          "earlyprintk": null,
+          "loglevel": 15
+        }
+      }
+    }
+  },
+  "extra": {
+    "_comment": "Files/folders will be copied from config directory to ramdisk using cp -rL (so symlinks are resolved)",
+    "compress_rd": false,
+    "ramdisk_copy": {
+      "redpill-linux-v3.10.180+.ko": "usr/lib/modules/rp.ko",
+      "virtio-3.10.108/virtio.ko": "lib/modules/",
+      "virtio-3.10.108/virtio_ring.ko": "lib/modules/",
+      "virtio-3.10.108/virtio_pci.ko": "lib/modules/",
+      "virtio-3.10.108/virtio_blk.ko": "lib/modules/",
+      "virtio-3.10.108/virtio_net.ko": "lib/modules/",
+      "virtio-3.10.108/virtio_scsi.ko": "lib/modules/",
+      "virtio-3.10.108/virtio_console.ko": "lib/modules/",
+      "virtio-3.10.108/virtio-rng.ko": "lib/modules/"
+    }
+  }
+}
+
