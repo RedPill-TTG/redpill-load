@@ -310,12 +310,6 @@ if [ ! -f "${BRP_RD_REPACK}" ]; then # do we even need to unpack-modify-repack t
   brp_replace_token_with_text "${BRP_POST_INIT_FILE}" '@@@CONFIG-GENERATED@@@' "${BRP_OS_CONFS_LINES}"
   pr_process_ok
 
-  # Copy any extra files to the ramdisk
-  brp_cp_from_list "${BRP_REL_CONFIG_JSON}" "extra.ramdisk_copy" BRP_RELEASE_PATHS "${BRP_URD_DIR}"
-  if [[ "$(brp_json_has_field "${BRP_USER_CFG}" 'ramdisk_copy')" -eq 1 ]]; then
-    brp_cp_from_list "${BRP_USER_CFG}" "ramdisk_copy" BRP_USER_PATHS "${BRP_URD_DIR}"
-  fi
-
   # Handle debug flags for core ramdisk
   if [ "${BRP_DEV_DISABLE_SB}" -eq 1 ]; then
       pr_warn "<DEV> Disabling mfgBIOS LKM"
@@ -355,9 +349,9 @@ brp_mkdir "${BRP_CUSTOM_DIR}"
 brp_mkdir "${RPT_IMG_EXTS_DIR}"
 
 # Copy any extra files to the ramdisk
-brp_cp_from_list "${BRP_REL_CONFIG_JSON}" "extra.ramdisk_copy" BRP_RELEASE_PATHS "${BRP_URD_DIR}"
+brp_cp_from_list "${BRP_REL_CONFIG_JSON}" "extra.ramdisk_copy" BRP_RELEASE_PATHS "${BRP_CUSTOM_DIR}"
 if [[ "$(brp_json_has_field "${BRP_USER_CFG}" 'ramdisk_copy')" -eq 1 ]]; then
-  brp_cp_from_list "${BRP_USER_CFG}" "ramdisk_copy" BRP_USER_PATHS "${BRP_URD_DIR}"
+  brp_cp_from_list "${BRP_USER_CFG}" "ramdisk_copy" BRP_USER_PATHS "${BRP_CUSTOM_DIR}"
 fi
 
 # Handle debug flags for custom ramdisk
