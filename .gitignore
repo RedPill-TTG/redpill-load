@@ -7,3 +7,4 @@ images/
 /user_config.json
 /user_config*.json
 email.patch
+.idea/
