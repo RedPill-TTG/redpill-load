@@ -105,7 +105,7 @@ brp_unpack_zimage()
   local output;
   local log_file="${2}.log";
 
-  output=$(tools/extract-vmlinux.sh "${1}" 1> "${2}" 2>"${log_file}")
+  output=$("${EXTRACT_VMLINUX_PATH}" "${1}" 1> "${2}" 2>"${log_file}")
   if [ $? -ne 0 ]; then
     pr_process_err
     pr_crit "Failed to unpack zImage\n\n%s" "$(cat \"${2}.log\")"
