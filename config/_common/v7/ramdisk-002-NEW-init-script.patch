@@ -1,14 +1,5 @@
 --- a/linuxrc.syno.impl
 +++ b/linuxrc.syno.impl
-@@ -3,6 +3,8 @@
- 
- echo "START /linuxrc.syno.impl"
- 
-+insmod /usr/lib/modules/rp.ko && rm /usr/lib/modules/rp.ko
-+
- . /etc.defaults/rc.subr
- . /usr/syno/share/environments.sh
- . /usr/syno/share/util.sh
 @@ -138,6 +140,7 @@ fi
  # insert basic USB modules for detect f401/FDT
  echo "Insert basic USB modules..."

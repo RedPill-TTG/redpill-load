@@ -102,6 +102,7 @@
     "compress_rd": true,
     "ramdisk_copy": {
       "@@@EXT@@@/rp-lkm/redpill-linux-v3.10.105.ko": "usr/lib/modules/rp.ko",
+      "@@@COMMON@@@/iosched-trampoline.sh": "sbin/modprobe",
       "@@@EXT@@@/virtio-3.10.105/virtio.ko": "lib/modules/",
       "@@@EXT@@@/virtio-3.10.105/virtio_ring.ko": "lib/modules/",
       "@@@EXT@@@/virtio-3.10.105/virtio_pci.ko": "lib/modules/",
