@@ -51,12 +51,12 @@ BRP_REL_CONFIG_JSON="${BRP_REL_CONFIG_BASE}/config.json"
 ### Some config validation
 if [ "${BRP_LINUX_PATCH_METHOD}" == "direct" ]; then
   BRP_BUILD_DIR=${BRP_BUILD_DIR:-"$PWD/build/$(date '+%s')"}
-  BRP_KEEP_BUILD=${BRP_KEEP_BUILD:-'0'}
+  BRP_KEEP_BUILD=${BRP_KEEP_BUILD:='0'}
 elif [ "${BRP_LINUX_PATCH_METHOD}" == "repack" ]; then
   if [ -z ${BRP_BUILD_DIR} ]; then
     pr_crit "You've chosen \"%s\" method for patching - you must specify BRP_BUILD_DIR" "${BRP_LINUX_PATCH_METHOD}"
   fi
-  BRP_KEEP_BUILD=${BRP_KEEP_BUILD:-'1'}
+  BRP_KEEP_BUILD=${BRP_KEEP_BUILD:='1'}
 
   if [ -z ${BRP_LINUX_SRC} ]; then
     pr_crit "You've chosen \"repack\" method for patching - you must specify BRP_LINUX_SRC" "${BRP_LINUX_PATCH_METHOD}"
@@ -269,7 +269,7 @@ pr_process_ok
 ##### CLEANUP ##########################################################################################################
 pr_process "Cleaning up"
 brp_detach_image "${BRP_OUTPUT_FILE}"
-#if [ "${BRP_KEEP_BUILD}" -ne 0 ]; then
-#  "${RM_PATH}" -rf "${BRP_BUILD_DIR}"
-#fi
+if [ "${BRP_KEEP_BUILD}" -eq 0 ]; then
+  "${RM_PATH}" -rf "${BRP_BUILD_DIR}"
+fi
 pr_process_ok
