@@ -22,7 +22,7 @@
  if [ "$UniqueRD" = "kvmx64" -o \
  		"$UniqueRD" = "nextkvmx64" -o \
 -		"$UniqueRD" = "kvmcloud" ]; then
-+		"$UniqueRD" = "kvmcloud" ] || (dmesg | grep -q -E "DMI: .*(QEMU|VirtualBox)"); then
++		"$UniqueRD" = "kvmcloud" ] || (grep -r -q -E "(QEMU|VirtualBox)" /sys/devices/virtual/dmi/id/); then
  	insmod /lib/modules/virtio.ko
  	insmod /lib/modules/virtio_ring.ko
  	insmod /lib/modules/virtio_pci.ko
