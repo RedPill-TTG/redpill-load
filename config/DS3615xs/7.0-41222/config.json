@@ -26,8 +26,8 @@
     ],
     "ramdisk": [
       "@@@COMMON@@@/ramdisk-001-disable-root-pwd.patch",
-      "@@@COMMON@@@/v7/ramdisk-002-OLD-init-script.patch",
-      "@@@COMMON@@@/v7/ramdisk-003-post-init-script.patch"
+      "@@@COMMON@@@/ramdisk-002-init-script-OLD-name.patch",
+      "@@@COMMON@@@/ramdisk-003-post-init-script-UPPER.patch"
     ]
   },
   "synoinfo": {
@@ -69,7 +69,7 @@
           "echo Loading Linux...",
           "linux /zImage @@@CMDLINE@@@",
           "echo Loading initramfs...",
-          "initrd /rd.gz",
+          "initrd /rd.gz /custom.gz",
           "echo Starting kernel with USB boot"
         ],
         "cmdline": {
@@ -84,7 +84,7 @@
           "echo Loading Linux...",
           "linux /zImage @@@CMDLINE@@@",
           "echo Loading initramfs...",
-          "initrd /rd.gz",
+          "initrd /rd.gz /custom.gz",
           "echo Starting kernel with SATA boot"
         ],
         "cmdline": {
@@ -100,15 +100,7 @@
     "compress_rd": false,
     "ramdisk_copy": {
       "@@@EXT@@@/rp-lkm/redpill-linux-v3.10.108.ko": "usr/lib/modules/rp.ko",
-      "@@@COMMON@@@/iosched-trampoline.sh": "sbin/modprobe",
-      "@@@EXT@@@/virtio-3.10.108/virtio.ko": "lib/modules/",
-      "@@@EXT@@@/virtio-3.10.108/virtio_ring.ko": "lib/modules/",
-      "@@@EXT@@@/virtio-3.10.108/virtio_pci.ko": "lib/modules/",
-      "@@@EXT@@@/virtio-3.10.108/virtio_blk.ko": "lib/modules/",
-      "@@@EXT@@@/virtio-3.10.108/virtio_net.ko": "lib/modules/",
-      "@@@EXT@@@/virtio-3.10.108/virtio_scsi.ko": "lib/modules/",
-      "@@@EXT@@@/virtio-3.10.108/virtio_console.ko": "lib/modules/",
-      "@@@EXT@@@/virtio-3.10.108/virtio-rng.ko": "lib/modules/"
+      "@@@COMMON@@@/iosched-trampoline.sh": "usr/sbin/modprobe"
     },
     "bootp1_copy": {
       "@@@PAT@@@/GRUB_VER": "GRUB_VER"
