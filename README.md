@@ -9,7 +9,7 @@ didn't happen to us but hey...).
 ## How to use it?
 1. Make sure you're running Linux
 2. Compile RedPill LKM and place it in `ext/rp-lkm/redpill-linux-<VERSION>.ko` (see platform config for details)
-3. Create `user_config.json` which contains at minimum:
+3. Create `user_config.json` which contains at minimum (for USB boot):
 
     ```json
     {
@@ -18,18 +18,18 @@ didn't happen to us but hey...).
         "pid": "<fill me>",
         "sn": "<fill me>",
         "mac1": "<fill me>"
-      },
-      "synoinfo": {},
-      "ramdisk_copy": {}
+      }
     }
     ```
 
  - We cannot help you obtain the S/N
  - VID/PID correspond to your USB stick vendor id and product id (google: `vid pid usb drive`)
  - If you're running QEmu-based virtualization (e.g. Proxmox or VirtualBox) set `vid` to `0x46f4` and `pid` to `0x0001`
+ - If you're running SATA-based boot you can skip `vid` and `pid` fields (just remove them)
  - `mac1` is the MAC address of your first ethernet interface
  - If you want to add more ethernet cards simply put `mac2`/`mac3`/`mac4` and `netif_num` to the number of card
  - `synoinfo` is a key=>value structure where you can override any `synoinfo` options (e.g. `"SataPortMap": "..."`)
+ - If you want to see all options available take a look at [`user_config.FULL-EXAMPLE.json`](user_config.FULL-EXAMPLE.json)
 
 3. Run `./build-loader.sh <hw_version> <os_version>` (e.g. `./build-loader.sh 'DS918+' '6.2.4-25556'`)  
 It will download all files needed and complain if something isn't right
