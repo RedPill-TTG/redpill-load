@@ -1,0 +1,6 @@
+scratchpad/
+build/
+cache/
+!cache/.gitkeep
+/user_config.json
+/user_config*.json

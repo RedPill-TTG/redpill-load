@@ -1,0 +1,94 @@
+########################################################################################################################
+### Building GRUB
+########################################################################################################################
+
+For details see INSTALL in the grub archive. This is a short rundown of how the version in grub-bin is created (which
+should be a rare process).
+
+Version used: https://ftp.gnu.org/gnu/grub/grub-2.06.tar.gz
+
+The following packages are needed on debian:
+build-essential bison flex dosfstools
+
+The following settings were detected by ./configure for the binary release:
+    *******************************************************
+    GRUB2 will be compiled with following components:
+    Platform: i386-pc
+    With devmapper support: No (need libdevmapper header)
+    With memory debugging: No
+    With disk cache statistics: No
+    With boot time statistics: No
+    efiemu runtime: Yes
+    grub-mkfont: No (need freetype2 library)
+    grub-mount: No (need FUSE library)
+    starfield theme: No (No build-time grub-mkfont)
+    With libzfs support: No (need zfs library)
+    Build-time grub-mkfont: No (need freetype2 library)
+    Without unifont (no build-time grub-mkfont)
+    Without liblzma (no support for XZ-compressed mips images) (need lzma library)
+    With stack smashing protector: No
+    *******************************************************
+
+########################################################################################################################
+### Create the image
+########################################################################################################################
+You can adjust sizes of partitions as needed. The reasoning for picking these sizes here:
+ - p1 needs to accommodate kernel + ramdisk (which for some broken kernels must be uncompressed CPIO)
+ - p2 needs to accommodate what DSM puts there + extra modules from users
+ - p3 is a standard EFI partition (which we don't use since we don't screw with buggy PC-EFI implementations)
+
+
+dd if=/dev/zero of=redpill-template.img bs=1024k seek=128 count=0
+fdisk redpill-template.img
+    Command (m for help): n
+    Select (default p): p
+    Partition number (1-4, default 1): 1
+    First sector (2048-262143, default 2048):
+    Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-262143, default 262143): +48M
+
+    Command (m for help): n
+    Select (default p): p
+    Partition number (2-4, default 2): 2
+    First sector (100352-262143, default 100352):
+    Last sector, +/-sectors or +/-size{K,M,G,T,P} (100352-262143, default 262143): +75M
+
+    Command (m for help): n
+    Select (default p): p
+    Partition number (3,4, default 3): 3
+    First sector (253952-262143, default 253952):
+    Last sector, +/-sectors or +/-size{K,M,G,T,P} (253952-262143, default 262143):
+
+    Command (m for help): w
+    The partition table has been altered.
+    Syncing disks.
+
+fdisk -l redpill-template.img  # verify if the result looks like below
+   Device                Boot  Start    End Sectors Size Id Type
+   redpill-template.img1        2048 100351   98304  48M 83 Linux
+   redpill-template.img2      100352 253951  153600  75M 83 Linux
+   redpill-template.img3      253952 262143    8192   4M 83 Linux
+
+losetup -P /dev/loop8 redpill-template.img
+mkdosfs -F32 /dev/loop8p1
+mkfs.ext2 /dev/loop8p2
+
+########################################################################################################################
+### Install grub
+########################################################################################################################
+mkdir temp-mount-p1
+mount /dev/loop8p1 ./temp-mount-p1
+./grub-2.06/grub-install \
+    -d ./grub-2.06/grub-core \
+    --target=i386-pc --no-floppy -s \
+    --root-directory=$PWD/temp-mount-p1 \
+    /dev/loop8
+# small note: --root-directory MUST be an absolute path (or it will create it in /)
+sync
+umount /dev/loop8p1
+
+########################################################################################################################
+### Pack image
+########################################################################################################################
+Nothing fancy here - just squashing the zeros
+
+gzip -c redpill-template.img > boot-image-template.img.gz
