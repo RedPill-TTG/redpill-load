@@ -25,9 +25,9 @@
       "zImage-001-3615xs-41222-ramdisk-and-header.bsp"
     ],
     "ramdisk": [
-      "ramdisk-001-disable-root-pwd.patch",
-      "ramdisk-002-init-script.patch",
-      "ramdisk-003-post-init-script.patch"
+      "@@@COMMON@@@/ramdisk-001-disable-root-pwd.patch",
+      "@@@COMMON@@@/v7/ramdisk-002-OLD-init-script.patch",
+      "@@@COMMON@@@/v7/ramdisk-003-post-init-script.patch"
     ]
   },
   "synoinfo": {
@@ -43,7 +43,7 @@
     "myds_region_api_base_url": "https://example.com"
   },
   "grub": {
-    "template": "grub-template.conf",
+    "template": "@@@COMMON@@@/grub-template.conf",
     "base_cmdline": {
       "sn": "",
       "vid": "0x46f4",
@@ -96,18 +96,26 @@
     }
   },
   "extra": {
-    "_comment": "Files/folders will be copied from config directory to ramdisk using cp -rL (so symlinks are resolved)",
     "compress_rd": false,
     "ramdisk_copy": {
-      "redpill-linux-v3.10.108.ko": "usr/lib/modules/rp.ko",
-      "virtio-3.10.108/virtio.ko": "lib/modules/",
-      "virtio-3.10.108/virtio_ring.ko": "lib/modules/",
-      "virtio-3.10.108/virtio_pci.ko": "lib/modules/",
-      "virtio-3.10.108/virtio_blk.ko": "lib/modules/",
-      "virtio-3.10.108/virtio_net.ko": "lib/modules/",
-      "virtio-3.10.108/virtio_scsi.ko": "lib/modules/",
-      "virtio-3.10.108/virtio_console.ko": "lib/modules/",
-      "virtio-3.10.108/virtio-rng.ko": "lib/modules/"
+      "@@@EXT@@@/rp-lkm/redpill-linux-v3.10.108.ko": "usr/lib/modules/rp.ko",
+      "@@@EXT@@@/virtio-3.10.108/virtio.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-3.10.108/virtio_ring.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-3.10.108/virtio_pci.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-3.10.108/virtio_blk.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-3.10.108/virtio_net.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-3.10.108/virtio_scsi.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-3.10.108/virtio_console.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-3.10.108/virtio-rng.ko": "lib/modules/"
+    },
+    "bootp1_copy": {
+      "@@@PAT@@@/GRUB_VER": "GRUB_VER"
+    },
+    "bootp2_copy": {
+      "@@@PAT@@@/GRUB_VER": "GRUB_VER",
+      "@@@PAT@@@/grub_cksum.syno": "grub_cksum.syno",
+      "@@@PAT@@@/rd.gz": "rd.gz",
+      "@@@PAT@@@/zImage": "zImage"
     }
   }
 }

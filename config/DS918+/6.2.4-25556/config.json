@@ -20,14 +20,13 @@
   },
 
   "patches": {
-    "_comment": ".bsp patches are applied to FILES using bspatch(1); .patch are applied to DIRECTORIES using patch(1)",
     "zlinux": [
       "zImage-001-918p-25556-ramdisk-and-flag-NOP.bsp"
     ],
     "ramdisk": [
-      "ramdisk-001-disable-root-pwd.patch",
-      "ramdisk-002-init-script.patch",
-      "ramdisk-003-post-init-script.patch"
+      "@@@COMMON@@@/ramdisk-001-disable-root-pwd.patch",
+      "@@@COMMON@@@/v6/ramdisk-002-init-script.patch",
+      "@@@COMMON@@@/v6/ramdisk-003-post-init-script.patch"
     ]
   },
 
@@ -47,7 +46,7 @@
   },
 
   "grub": {
-    "template": "grub-template.conf",
+    "template": "@@@COMMON@@@/grub-template.conf",
     "base_cmdline": {
       "sn": "",
       "vid": "0x46f4",
@@ -88,18 +87,27 @@
   },
 
   "extra": {
-    "_comment": "Files/folders will be copied from config directory to ramdisk using cp -rL (so symlinks are resolved)",
-    "_comment2": "Syno kernel v4.4.59+ has broken unpacking routines (sic!)",
     "compress_rd": false,
     "ramdisk_copy": {
-      "redpill-linux-v4.4.59+.ko": "usr/lib/modules/rp.ko",
-      "virtio-4.4.59+/virtio.ko": "lib/modules/",
-      "virtio-4.4.59+/virtio_ring.ko": "lib/modules/",
-      "virtio-4.4.59+/virtio_pci.ko": "lib/modules/",
-      "virtio-4.4.59+/virtio_blk.ko": "lib/modules/",
-      "virtio-4.4.59+/virtio_net.ko": "lib/modules/",
-      "virtio-4.4.59+/virtio_scsi.ko": "lib/modules/",
-      "virtio-4.4.59+/virtio_console.ko": "lib/modules/"
+      "@@@EXT@@@/rp-lkm/redpill-linux-v4.4.59+.ko": "usr/lib/modules/rp.ko",
+      "@@@EXT@@@/virtio-4.4.59+/virtio.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-4.4.59+/virtio_ring.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-4.4.59+/virtio_pci.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-4.4.59+/virtio_blk.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-4.4.59+/virtio_net.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-4.4.59+/virtio_scsi.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-4.4.59+/virtio_console.ko": "lib/modules/"
+    },
+    "bootp1_copy": {
+      "@@@PAT@@@/GRUB_VER": "GRUB_VER",
+      "@@@COMMON@@@/EFI": "EFI"
+    },
+    "bootp2_copy": {
+      "@@@PAT@@@/GRUB_VER": "GRUB_VER",
+      "@@@COMMON@@@/EFI": "EFI",
+      "@@@PAT@@@/grub_cksum.syno": "grub_cksum.syno",
+      "@@@PAT@@@/rd.gz": "rd.gz",
+      "@@@PAT@@@/zImage": "zImage"
     }
   }
 }
