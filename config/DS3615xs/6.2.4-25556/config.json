@@ -30,7 +30,6 @@
     ]
   },
   "synoinfo": {
-    "supportadt7490": "",
     "maxdisks": "15",
     "internalportcfg": "0x78FF",
     "esataportcfg": "0x0",
