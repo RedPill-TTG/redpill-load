@@ -75,7 +75,8 @@
         ],
         "cmdline": {
           "earlyprintk": null,
-          "loglevel": 15
+          "loglevel": 15,
+          "log_buf_len": "32M"
         }
       },
       "RedPill DS3615xs v6.2.4-25556 (SATA, Verbose)": {
@@ -91,7 +92,8 @@
         "cmdline": {
           "earlyprintk": null,
           "loglevel": 15,
-          "synoboot_satadom": 1
+          "synoboot_satadom": 1,
+          "log_buf_len": "32M"
         }
       }
     }
