@@ -1,0 +1,105 @@
+{
+  "os": {
+    "id": "ds918+_41890",
+    "pat_url": "https://global.download.synology.com/download/DSM/release/7.0/41890/DSM_DS918%2B_41890.pat",
+    "sha256": "d7348d18d81ebf66eb690848cf6254d896eddf764d06a17b4bd591679e400434"
+  },
+
+  "files": {
+    "zlinux": {
+      "name": "zImage",
+      "sha256": "3466ec40925078c75dfc6900da7a7a52eedbe38c556e7cee58e8eda4c27a1755"
+    },
+    "ramdisk": {
+      "name": "rd.gz",
+      "sha256": "c45e5fcfb5ac4d9395496e0c7d0433a9600eae45e8d9de31666439818c7cfcfe"
+    },
+    "vmlinux": {
+      "sha256": "aeeb8fd775f7b3d149e0ad6534c4ada162556e4c5c3d171808b9a1cbd93266cf"
+    }
+  },
+
+  "patches": {
+    "_comment": ".bsp patches are applied to FILES using bspatch(1); .patch are applied to DIRECTORIES using patch(1)",
+    "zlinux": [
+      "zImage-001-918p-41890-ramdisk-and-flag-NOP.bsp"
+    ],
+    "ramdisk": [
+      "ramdisk-001-disable-root-pwd.patch",
+      "ramdisk-002-init-script.patch",
+      "ramdisk-003-post-init-script.patch"
+    ]
+  },
+
+  "synoinfo": {
+    "maxdisks": "16",
+    "internalportcfg": "0xffff",
+    "esataportcfg": "0x0",
+    "HddHotplug": "",
+    "support_led_brightness_adjustment": "",
+    "support_leds_lp3943": "",
+    "buzzeroffen": "0xffff",
+    "rss_server": "http://example.com/null.xml",
+    "rss_server_ssl": "https://example.com/null.xml",
+    "small_info_path": "https://example.com/null",
+    "updateurl": "http://example.com/",
+    "myds_region_api_base_url": "https://example.com"
+  },
+
+  "grub": {
+    "template": "grub-template.conf",
+    "base_cmdline": {
+      "sn": "",
+      "vid": "0x46f4",
+      "pid": "0x0001",
+      "mac1": "",
+      "netif_num": 1,
+
+      "syno_hw_version": "DS918+",
+      "syno_hdd_powerup_seq": 1,
+      "HddHotplug": 0,
+      "vender_format_version": 2,
+      "console": "ttyS2,115200n8",
+      "withefi": null,
+      "elevator": "elevator",
+      "syno_port_thaw": 1,
+      "syno_hdd_detect": 0,
+      "root": "/dev/md0",
+      "earlycon": "uart8250,io,0x3f8,115200n8"
+    },
+
+    "menu_entries": {
+      "RedPill DS918+ v7.0-41890 (Verbose)": {
+        "options": [
+          "set root=(hd0,msdos1)",
+          "echo Loading Linux...",
+          "linux /zImage @@@CMDLINE@@@",
+          "echo Loading initramfs...",
+          "initrd /rd.gz",
+          "echo Starting kernel"
+        ],
+        "cmdline": {
+          "earlyprintk": null,
+          "loglevel": 15
+        }
+      }
+    }
+  },
+
+  "extra": {
+    "_comment": "Files/folders will be copied from config directory to ramdisk using cp -rL (so symlinks are resolved)",
+    "_comment2": "Syno kernel v4.4.180+ has broken unpacking routines (sic!)",
+    "compress_rd": false,
+    "ramdisk_copy": {
+      "redpill-linux-v4.4.180+.ko": "usr/lib/modules/rp.ko",
+      "virtio-4.4.180+/virtio.ko": "lib/modules/",
+      "virtio-4.4.180+/virtio_ring.ko": "lib/modules/",
+      "virtio-4.4.180+/virtio_pci.ko": "lib/modules/",
+      "virtio-4.4.180+/virtio_blk.ko": "lib/modules/",
+      "virtio-4.4.180+/virtio_net.ko": "lib/modules/",
+      "virtio-4.4.180+/virtio_scsi.ko": "lib/modules/",
+      "virtio-4.4.180+/virtio_console.ko": "lib/modules/"
+    }
+  }
+}
+
