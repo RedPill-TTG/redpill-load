@@ -27,4 +27,4 @@
 +
  Mkdir -p /tmpRoot/initrd
  
- Umount /proc >/dev/null 2>&1
+ Umount /proc &> /dev/null

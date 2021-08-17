@@ -7,9 +7,9 @@
 +insmod /usr/lib/modules/rp.ko && rm /usr/lib/modules/rp.ko
 +
  . /etc.defaults/rc.subr
+ . /usr/syno/share/environments.sh
  
- Mnt="/tmpRoot"
-@@ -131,6 +133,7 @@
+@@ -137,6 +139,7 @@ fi
  # insert basic USB modules for detect f401/FDT
  echo "Insert basic USB modules..."
  SYNOLoadModules $USB_MODULES
@@ -17,7 +17,7 @@
  
  # insert Etron USB3.0 drivers
  
-@@ -237,7 +239,7 @@
+@@ -249,7 +252,7 @@ if [ "x" != "x`/bin/get_key_value /etc.d
  fi
  if [ "$UniqueRD" = "kvmx64" -o \
  		"$UniqueRD" = "nextkvmx64" -o \
