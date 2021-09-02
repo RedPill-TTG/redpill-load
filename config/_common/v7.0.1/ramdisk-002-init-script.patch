@@ -1,0 +1,27 @@
+--- a/linuxrc.syno.impl
++++ b/linuxrc.syno.impl
+@@ -155,6 +155,7 @@ fi
+ # insert basic USB modules for detect f401/FDT
+ echo "Insert basic USB modules..."
+ SYNOLoadModules $USB_MODULES
++SYNOLoadModules "usb-storage"
+ 
+ # insert Etron USB3.0 drivers
+ 
+@@ -270,7 +271,7 @@ if [ "x" != "x`/bin/get_key_value /etc.d
+ fi
+ if [ "$UniqueRD" = "kvmx64" -o \
+ 		"$UniqueRD" = "nextkvmx64" -o \
+-		"$UniqueRD" = "kvmcloud" ]; then
++		"$UniqueRD" = "kvmcloud" ] || (grep -r -q -E "(QEMU|VirtualBox)" /sys/devices/virtual/dmi/id/); then
+ 	insmod /lib/modules/virtio.ko
+ 	insmod /lib/modules/virtio_ring.ko
+ 	insmod /lib/modules/virtio_pci.ko
+@@ -278,6 +279,7 @@ if [ "$UniqueRD" = "kvmx64" -o \
+ 	insmod /lib/modules/virtio_net.ko
+ 	insmod /lib/modules/virtio_scsi.ko
+ 	insmod /lib/modules/virtio_console.ko
++	insmod /lib/modules/rng-core.ko
+ 	insmod /lib/modules/virtio-rng.ko
+ fi
+ 
