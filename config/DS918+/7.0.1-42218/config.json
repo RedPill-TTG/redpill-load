@@ -1,46 +1,50 @@
 {
   "os": {
-    "id": "ds3615xs_41222",
-    "pat_url": "https://global.download.synology.com/download/DSM/beta/7.0/41222/DSM_DS3615xs_41222.pat",
-    "sha256": "fe3ce1a783d3fdf86e01810658da3e1a4f563560129b988cf0036a052c8dc891"
+    "id": "ds918p_42218",
+    "pat_url": "https://global.download.synology.com/download/DSM/release/7.0.1/42218/DSM_DS918%2B_42218.pat",
+    "sha256": "4fc59b0f0adfdd96467376f50919dde1bf5dcec74e53452e626f9cf7bd52a38c"
   },
 
   "files": {
     "zlinux": {
       "name": "zImage",
-      "sha256": "fe50f8b5a4cd263398e95f33dea08b4d568ef43f7aa22c808ddc2b86c3c2d90b"
+      "sha256": "0df0fe7b86c269a58933e334cde5056cf5a901f705d6fef5cd750f2981b0ca04"
     },
     "ramdisk": {
       "name": "rd.gz",
-      "sha256": "bdde82e6b79048a860349abe566424ee00c731e00f28e0b4532b427132c14c1a"
+      "sha256": "016a99d562b0c06be5f36b4d69a7208ccd2dc816de85c9fb1bba3bf493e1e3ec"
     },
     "vmlinux": {
-      "sha256": "65fdebe9b699f4b5482932df0ae0abb14ef38235a794ef8d651791b4fd08047e"
+      "sha256": "c1ca010542e8c34a675f1e072fcd6e8e9169aa7477790772652f4ece3ead467a"
     }
   },
 
   "patches": {
-    "_comment": ".bsp patches are applied to FILES using bspatch(1); .patch are applied to DIRECTORIES using patch(1)",
     "zlinux": [
-      "zImage-001-3615xs-41222-ramdisk-and-header.bsp"
+      "zImage-001-918p-42218-ramdisk-and-flag-NOP.bsp"
     ],
     "ramdisk": [
       "@@@COMMON@@@/ramdisk-001-disable-root-pwd.patch",
-      "@@@COMMON@@@/ramdisk-002-init-script-OLD-name.patch",
-      "@@@COMMON@@@/ramdisk-003-post-init-script-UPPER.patch"
+      "@@@COMMON@@@/v7.0.1/ramdisk-002-init-script.patch",
+      "@@@COMMON@@@/v7.0.1/ramdisk-003-post-init-script.patch"
     ]
   },
+
   "synoinfo": {
-    "maxdisks": "15",
-    "internalportcfg": "0x78FF",
+    "maxdisks": "16",
+    "internalportcfg": "0xffff",
     "esataportcfg": "0x0",
-    "usbportcfg": "0x8700",
+    "HddHotplug": "",
+    "support_led_brightness_adjustment": "",
+    "support_leds_lp3943": "",
+    "buzzeroffen": "0xffff",
     "rss_server": "http://example.com/null.xml",
     "rss_server_ssl": "https://example.com/null.xml",
     "small_info_path": "https://example.com/null",
     "updateurl": "http://example.com/",
     "myds_region_api_base_url": "https://example.com"
   },
+
   "grub": {
     "template": "@@@COMMON@@@/grub-template.conf",
     "base_cmdline": {
@@ -50,8 +54,8 @@
       "mac1": "",
       "netif_num": 1,
 
-      "syno_hw_version": "DS3615xs",
-      "syno_hdd_powerup_seq": 0,
+      "syno_hw_version": "DS918+",
+      "syno_hdd_powerup_seq": 1,
       "HddHotplug": 0,
       "vender_format_version": 2,
       "console": "ttyS0,115200n8",
@@ -62,15 +66,16 @@
       "root": "/dev/md0",
       "earlycon": "uart8250,io,0x3f8,115200n8"
     },
+
     "menu_entries": {
-      "RedPill DS3615xs v7.0-41222 Beta (USB, Verbose)": {
+      "RedPill DS918+ v7.0.1-42218 (USB, Verbose)": {
         "options": [
           "savedefault",
           "set root=(hd0,msdos1)",
           "echo Loading Linux...",
           "linux /zImage @@@CMDLINE@@@",
           "echo Loading initramfs...",
-          "initrd /rd.gz /custom.gz",
+          "initrd /rd.gz",
           "echo Starting kernel with USB boot"
         ],
         "cmdline": {
@@ -79,36 +84,48 @@
           "log_buf_len": "32M"
         }
       },
-      "RedPill DS3615xs v7.0-41222 Beta (SATA, Verbose)": {
+      "RedPill DS918+ v7.0.1-42218 (SATA, Verbose)": {
         "options": [
           "savedefault",
           "set root=(hd0,msdos1)",
           "echo Loading Linux...",
           "linux /zImage @@@CMDLINE@@@",
           "echo Loading initramfs...",
-          "initrd /rd.gz /custom.gz",
-          "echo Starting kernel with SATA boot"
+          "initrd /rd.gz",
+          "echo Starting kernel with SATA boot",
+          "echo WARNING: SATA boot support on this platform is experimental!"
         ],
         "cmdline": {
           "earlyprintk": null,
           "loglevel": 15,
-          "synoboot_satadom": 1,
+          "synoboot_satadom": 2,
           "log_buf_len": "32M"
         }
       }
     }
   },
+
   "extra": {
     "compress_rd": false,
     "ramdisk_copy": {
-      "@@@EXT@@@/rp-lkm/redpill-linux-v3.10.108.ko": "usr/lib/modules/rp.ko",
-      "@@@COMMON@@@/iosched-trampoline.sh": "usr/sbin/modprobe"
+      "@@@EXT@@@/rp-lkm/redpill-linux-v4.4.180+.ko": "usr/lib/modules/rp.ko",
+      "@@@COMMON@@@/iosched-trampoline.sh": "sbin/modprobe",
+      "@@@EXT@@@/virtio-4.4.180+/virtio.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-4.4.180+/virtio_ring.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-4.4.180+/virtio_pci.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-4.4.180+/virtio_blk.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-4.4.180+/virtio_net.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-4.4.180+/virtio_scsi.ko": "lib/modules/",
+      "@@@EXT@@@/virtio-4.4.180+/virtio_console.ko": "lib/modules/"
     },
     "bootp1_copy": {
-      "@@@PAT@@@/GRUB_VER": "GRUB_VER"
+      "@@@PAT@@@/GRUB_VER": "GRUB_VER",
+      "@@@COMMON@@@/EFI/boot/SynoBootLoader.conf": "EFI/BOOT/",
+      "@@@COMMON@@@/EFI/boot/SynoBootLoader.efi": "EFI/BOOT/"
     },
     "bootp2_copy": {
       "@@@PAT@@@/GRUB_VER": "GRUB_VER",
+      "@@@COMMON@@@/EFI": "EFI",
       "@@@PAT@@@/grub_cksum.syno": "grub_cksum.syno",
       "@@@PAT@@@/rd.gz": "rd.gz",
       "@@@PAT@@@/zImage": "zImage"
