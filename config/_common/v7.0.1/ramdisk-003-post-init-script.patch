@@ -1,6 +1,6 @@
 --- a/usr/sbin/init.post
 +++ b/usr/sbin/init.post
-@@ -18,6 +18,27 @@ if [ "$UniqueRD" = "nextkvmx64" ]; then
+@@ -18,6 +18,54 @@ if [ "$UniqueRD" = "nextkvmx64" ]; then
  fi
  Mount "$RootDevice" /tmpRoot -o barrier=1
  
@@ -10,6 +10,33 @@
 +@@@CONFIG-MANIPULATORS-TOOLS@@@
 +
 +@@@CONFIG-GENERATED@@@
++
++DISK_MODULES=`cat /lib/modules-load.d/??-disk-????-*.conf | xargs`
++EXTRA_MODULES=`cat /lib/modules-load.d/??-extra-????-*.conf | xargs`
++OPTIONAL_MODULES=`cat /lib/modules-load.d/??-optional-????-*.conf | xargs`
++# FIXME should not copy all firmware
++EXTRA_FIRMWARES=`find /lib/firmware/ -printf "%P\n" | xargs`
++mkdir /tmpRoot/lib/modules-load.d/
++cp -a /lib/modules-load.d/??-disk-????-*.conf /tmpRoot/lib/modules-load.d/
++cp -a /lib/modules-load.d/??-extra-????-*.conf /tmpRoot/lib/modules-load.d/
++cp -a /lib/modules-load.d/??-optional-????-*.conf /tmpRoot/lib/modules-load.d/
++ln -s /bin/kmod /tmpRoot/usr/sbin/depmod
++
++for mod in $DISK_MODULES $EXTRA_MODULES $OPTIONAL_MODULES; do
++	src=/usr/lib/modules/${mod}.ko
++	dest=/usr/lib/modules/update/${mod}.ko
++	_cp_mod $src $dest
++	#echo "install $mod returns $?"
++done
++
++for fw in $EXTRA_FIRMWARES; do
++	path=/usr/lib/firmware/${fw}
++	_cp_fw $path $path
++	#echo "install $fw returns $?"
++done
++ln -s /tmpRoot/bin/kmod /usr/sbin/depmod
++/usr/sbin/depmod -a -b /tmpRoot
++rm /usr/sbin/depmod
 +
 +UPSTART="/tmpRoot/usr/share/init"
 +
