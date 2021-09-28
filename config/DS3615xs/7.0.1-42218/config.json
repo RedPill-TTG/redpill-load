@@ -1,28 +1,28 @@
 {
   "os": {
-    "id": "ds3615xs_42214",
-    "pat_url": "https://global.download.synology.com/download/DSM/release/7.0.1/42214/DSM_DS3615xs_42214.pat",
-    "sha256": "8bdb542dc2d3cc18f6a576f72f8ed8acae3aef9b8f6f4d2a41143dcf67a54ff6"
+    "id": "ds3615xs_42218",
+    "pat_url": "https://global.download.synology.com/download/DSM/release/7.0.1/42218/DSM_DS3615xs_42218.pat",
+    "sha256": "0813a94cabecb760fd419dc6415ef993d6cd439f8b4e4492c55aab52b2314d9a"
   },
 
   "files": {
     "zlinux": {
       "name": "zImage",
-      "sha256": "dde97ca5befede203cd0bc8428bcb8814eb6066919977c12f2bf416f4e88bcf8"
+      "sha256": "bbfe7c63507232665a67db02a2f3d257fd2c1b7576d26432778e0cf9a2a70924"
     },
     "ramdisk": {
       "name": "rd.gz",
-      "sha256": "1115a14f6e3707d10010e45ae39b6890f73217b964a83f7e74b527b6c8456c5c"
+      "sha256": "481c19f09f28f939222b69f4f3714843a80a0cc7aa0ec432da1e897083501ef2"
     },
     "vmlinux": {
-      "sha256": "40a4bea7dfd2165b3dda131a06d355481d40ae1eec19df59d585778085c4577d"
+      "sha256": "dd550fe7b6e53290b60475bfc299df5070ccd52c41bc739b6f7090c726cc1a0a"
     }
   },
 
   "patches": {
     "_comment": ".bsp patches are applied to FILES using bspatch(1); .patch are applied to DIRECTORIES using patch(1)",
     "zlinux": [
-      "zImage-001-3615xs-42214-ramdisk-and-header.bsp"
+      "zImage-001-3615xs-42218-ramdisk-and-header.bsp"
     ],
     "ramdisk": [
       "@@@COMMON@@@/ramdisk-001-disable-root-pwd.patch",
@@ -63,7 +63,7 @@
       "earlycon": "uart8250,io,0x3f8,115200n8"
     },
     "menu_entries": {
-      "RedPill DS3615xs v7.0.1-42214 RC (USB, Verbose)": {
+      "RedPill DS3615xs v7.0.1-42218 (USB, Verbose)": {
         "options": [
           "savedefault",
           "set root=(hd0,msdos1)",
@@ -79,7 +79,7 @@
           "log_buf_len": "32M"
         }
       },
-      "RedPill DS3615xs v7.0.1-42214 RC (SATA, Verbose)": {
+      "RedPill DS3615xs v7.0.1-42218 (SATA, Verbose)": {
         "options": [
           "savedefault",
           "set root=(hd0,msdos1)",
