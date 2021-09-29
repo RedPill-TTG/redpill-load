@@ -1,0 +1,4 @@
+{
+  "thethorgroup.virtio": "https://raw.githubusercontent.com/RedPill-TTG/redpill-virtio/master/rpext-index.json",
+  "thethorgroup.boot-wait": "https://raw.githubusercontent.com/RedPill-TTG/redpill-boot-wait/master/rpext-index.json"
+}

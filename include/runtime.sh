@@ -14,34 +14,39 @@ system_tools=(
   [curl]="curl --version" # downloading PATs
   [sha256sum]="sha256sum --version" # checksums verification
   [tar]="tar --version" # unpacking PATs
-  [xz]="xz --version" # unpacking & repacking ramdisks
-  [cpio]="cpio --version" # unpacking & repacking ramdisks
   [jq]="jq --version" # reading JSONs; needs AT LEAST 1.5!!!
   [sed]="sed --version" # manipulating configs
   [grep]="grep --version" # manipulating configs & other
-  [patch]="patch --version" # patching text files
   [mkdir]="mkdir --version" # creating directories
-  [cut]="cur --version" # extracting data from sha256sum (& others)
   [ls]="ls --version" # checkins lists of files for unpacked ramdisks
   [cp]="ls --version" # creating temps for binary patching
   [mv]="mv --version"
   [rm]="rm --version" # removing temps
-  [find]="find --version" # repacking ramdisks
-  [losetup]="losetup -V" # attaching template boot image
-  [mount]="mount --version" # mounting partitions from boot image
-  [umount]="mount --version" # unmounting partitions from boot image
-  [gzip]="gzip --version" # unpacking tempalte file
+  [find]="find --version" # repacking ramdisks & finding empty trees
+  [chmod]="chmod --version" # making sure executables are executable
+  [dirname]="dirname --version" # creating directories from full paths
 )
 typeset -A custom_tools
 custom_tools=(
 )
 
-if [ "${BRP_LINUX_PATCH_METHOD}" == "repack" ]; then
-  system_tools[unlzma]="unlzma --version"
-  custom_tools[rebuild_kernel]="ext/recreate-zImage/rebuild_kernel.sh"
-  custom_tools[extract_vmlinux]="ext/extract_vmlinux.sh"
-else
-  system_tools[bspatch]="bspatch --version"
+if [ ! -z "${BRP_LINUX_PATCH_METHOD+0}" ]; then
+  system_tools[xz]="xz --version" # unpacking & repacking ramdisks
+  system_tools[cpio]="cpio --version" # unpacking & repacking ramdisks
+  system_tools[patch]="patch --version" # patching text files
+  system_tools[cut]="cur --version" # extracting data from sha256sum (& others)
+  system_tools[losetup]="losetup -V" # attaching template boot image
+  system_tools[mount]="mount --version" # mounting partitions from boot image
+  system_tools[umount]="mount --version" # unmounting partitions from boot image
+  system_tools[gzip]="gzip --version" # unpacking tempalte file
+
+  if [ "${BRP_LINUX_PATCH_METHOD}" == "repack" ]; then
+    system_tools[unlzma]="unlzma --version"
+    custom_tools[rebuild_kernel]="ext/recreate-zImage/rebuild_kernel.sh"
+    custom_tools[extract_vmlinux]="ext/extract_vmlinux.sh"
+  else
+    system_tools[bspatch]="bspatch --version"
+  fi
 fi
 
 

@@ -64,6 +64,11 @@ pr_dbg()
   fi
 }
 
+pr_empty_nl()
+{
+  pr_print '' ''
+}
+
 pr_process()
 {
   _BRP_PROCESS_WAS_LAST=1
