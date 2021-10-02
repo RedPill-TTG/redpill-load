@@ -77,6 +77,7 @@
           "echo Loading initramfs...",
           "initrd /rd.gz /custom.gz",
           "echo Starting kernel with USB boot"
+          "echo This screen will stop updating shortly. Visit find.synology.com to continue DSM installation."
         ],
         "cmdline": {
           "earlyprintk": null,
@@ -94,6 +95,7 @@
           "initrd /rd.gz /custom.gz",
           "echo Starting kernel with SATA boot",
           "echo WARNING: SATA boot support on this platform is experimental!"
+          "echo This screen will stop updating shortly. Visit find.synology.com to continue DSM installation."
         ],
         "cmdline": {
           "earlyprintk": null,
