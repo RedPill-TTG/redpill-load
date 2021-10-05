@@ -49,7 +49,7 @@ brp_apply_text_patches()
     patch_file=$(brp_expand_var_path "${patch_file}" _path_map)
     pr_dbg "Applying %s" "${patch_file}"
 
-    out=$("${PATCH_PATH}" -p1 -d "${1}" <"${patch_file}" 2>&1)
+    out=$("${PATCH_PATH}" -p1 --verbose --no-backup-if-mismatch -d "${1}" <"${patch_file}" 2>&1)
     if [ $? -ne 0 ]; then
       pr_crit "One of the patches - %s - failed to apply\n\n%s" "${patch_file}" "${out}"
     fi

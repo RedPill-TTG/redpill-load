@@ -20,12 +20,14 @@ BRP_KEEP_BUILD=${BRP_KEEP_BUILD:-''} # will be set to 1 for repack method or 0 f
 BRP_LINUX_PATCH_METHOD=${BRP_LINUX_PATCH_METHOD:-"direct"} # how to generate kernel image (direct bsp patch vs repack)
 BRP_LINUX_SRC=${BRP_LINUX_SRC:-''} # used for repack method
 BRP_BOOT_IMAGE=${BRP_BOOT_IMAGE:-"$PWD/ext/boot-image-template.img.gz"} # gz-ed "template" image to base final image on
+# you can also set RPT_EXTS_DIR as it's used by ext-manager
+RPT_BUNDLED_EXTS_CFG=${RPT_BUNDLED_EXTS_CFG:-"$PWD/bundled-exts.json"} # file with list of bundled extensions
 
 # The options below are meant for debugging only. Setting them will create an image which is not normally usable
 BRP_DEV_DISABLE_RP=${BRP_DEV_DISABLE_RP:-0} # when set to 1 the rp.ko will be renamed to rp-dis.ko
 BRP_DEV_DISABLE_SB=${BRP_DEV_DISABLE_SB:-0} # when set to 1 the synobios.ko will be renamed to synobios-dis.ko
+BRP_DEV_DISABLE_EXTS=${BRP_DEV_DISABLE_EXTS:-0} # when set 1 all extensions will be disabled (and not included in image)
 ########################################################################################################################
-
 
 ##### INCLUDES #########################################################################################################
 . include/log.sh # logging helpers
@@ -36,6 +38,7 @@ BRP_DEV_DISABLE_SB=${BRP_DEV_DISABLE_SB:-0} # when set to 1 the synobios.ko will
 . include/file.sh # file-related operations (copying/moving/unpacking etc)
 . include/patch.sh # helpers for patching files using patch(1) and bspatch(1)
 . include/boot-image.sh # helper functions for dealing with the boot image
+. include/ext-bridge.sh # helper to interact with extensions manager
 ########################################################################################################################
 
 ##### CONFIGURATION VALIDATION##########################################################################################
@@ -106,6 +109,25 @@ typeset -r -A BRP_USER_PATHS=(
   [@@@_DEF_@@@]="${BRP_USER_DIR}"
 )
 
+### Load metadata about extensions
+typeset -a RPT_BUNDLED_EXTS_IDS # ordered IDs of bundled extensions
+typeset -A RPT_BUNDLED_EXTS # k=>v extensions to their index urls
+RPT_BUILD_EXTS='' # by default it's empty == all
+RPT_USER_EXTS=''
+if [[ "${BRP_DEV_DISABLE_EXTS}" -ne 1 ]]; then
+  RPT_USER_EXTS=$(rpt_load_user_extensions "${BRP_USER_CFG}") || exit 1
+  rpt_load_bundled_extensions "${RPT_BUNDLED_EXTS_CFG}" RPT_BUNDLED_EXTS_IDS RPT_BUNDLED_EXTS
+  if [[ ! -z "${RPT_USER_EXTS}" ]]; then # if user defined some extensions we need to whitelist bundled + user picked
+    for ext_id in ${RPT_BUNDLED_EXTS_IDS[@]+"${RPT_BUNDLED_EXTS_IDS[@]}"}; do
+      if [[ ! -z "${RPT_BUILD_EXTS}" ]]; then
+        RPT_BUILD_EXTS+=','
+      fi
+      RPT_BUILD_EXTS+="${ext_id}"
+    done
+    RPT_BUILD_EXTS+=",${RPT_USER_EXTS}"
+  fi
+fi
+
 pr_dbg "******** Printing config variables ********"
 pr_dbg "Cache dir: %s" "$BRP_CACHE_DIR"
 pr_dbg "Build dir: %s" "$BRP_BUILD_DIR"
@@ -123,7 +145,47 @@ pr_dbg "Common cfg base: %s" "$BRP_COMMON_CFG_BASE"
 pr_dbg "Release cfg base: %s" "$BRP_REL_CONFIG_BASE"
 pr_dbg "Release cfg JSON: %s" "$BRP_REL_CONFIG_JSON"
 pr_dbg "Release id: %s" "$BRP_REL_OS_ID"
+if [[ "${BRP_DEV_DISABLE_EXTS}" -ne 1 ]]; then
+  pr_dbg "User extensions [empty means all]: %s" "$RPT_USER_EXTS"
+  pr_dbg "Selected extensions [empty means all]: %s" "$RPT_BUILD_EXTS"
+else
+  pr_warn "User extensions: <disabled>"
+  pr_warn "Selected extensions: <all disabled>"
+fi
 pr_dbg "*******************************************"
+
+##### MODULES PREPARATION ##############################################################################################
+# We handle the extensions update early on to give the user early error if the image cannot even build due to exts issue
+if [[ "${BRP_DEV_DISABLE_EXTS}" -ne 1 ]]; then
+  pr_process "Updating extensions"
+  pr_empty_nl
+
+  pr_dbg "Verifying bundled extensions"
+  for bext_id in "${!RPT_BUNDLED_EXTS[@]}"; do # we can iterate through unordered k=>v as we use all anyway
+    pr_dbg "Checking %s bundled extension" "${bext_id}"
+    ( ./ext-manager.sh force_add "${bext_id}" "${RPT_BUNDLED_EXTS[$bext_id]}")
+    if [[ $? -ne 0 ]]; then
+      pr_crit "Failed to install %s bundled extension - see errors above" "${bext_id}"
+    fi
+  done
+  rpt_update_ext_indexes
+
+  if [[ -z "${RPT_BUILD_EXTS}" ]]; then
+    pr_dbg "Updating & downloading all extensions for %s" "${BRP_REL_OS_ID}"
+    ( ./ext-manager.sh _update_platform_exts "${BRP_REL_OS_ID}")
+    if [[ $? -ne 0 ]]; then
+      pr_crit "Failed to update all extensions for %s platform - see errors above" "${BRP_REL_OS_ID}"
+    fi
+  else
+    pr_dbg "Updating & downloading selected extensions (%s) for %s" "${RPT_BUILD_EXTS}" "${BRP_REL_OS_ID}"
+    ( ./ext-manager.sh _update_platform_exts "${BRP_REL_OS_ID}" "${RPT_BUILD_EXTS}")
+    if [[ $? -ne 0 ]]; then
+      pr_crit "Failed to update extensions selected (%s) for %s platform - see errors above" \
+              "${RPT_BUILD_EXTS}" "${BRP_REL_OS_ID}"
+    fi
+  fi
+  pr_process_ok
+fi
 
 ##### SYSTEM IMAGE HANDLING ############################################################################################
 readonly BRP_PAT_FILE="${BRP_CACHE_DIR}/${BRP_REL_OS_ID}.pat"
@@ -248,23 +310,12 @@ if [ ! -f "${BRP_RD_REPACK}" ]; then # do we even need to unpack-modify-repack t
   brp_replace_token_with_text "${BRP_POST_INIT_FILE}" '@@@CONFIG-GENERATED@@@' "${BRP_OS_CONFS_LINES}"
   pr_process_ok
 
-  # Copy any extra files to the ramdisk
-  brp_cp_from_list "${BRP_REL_CONFIG_JSON}" "extra.ramdisk_copy" BRP_RELEASE_PATHS "${BRP_URD_DIR}"
-  if [[ "$(brp_json_has_field "${BRP_USER_CFG}" 'ramdisk_copy')" -eq 1 ]]; then
-    brp_cp_from_list "${BRP_USER_CFG}" "ramdisk_copy" BRP_USER_PATHS "${BRP_URD_DIR}"
-  fi
-
-  # Handle debug flags
-  if [ "${BRP_DEV_DISABLE_RP}" -eq 1 ]; then
-    pr_warn "<DEV> Disabling RedPill LKM"
-    "${MV_PATH}" "${BRP_URD_DIR}/usr/lib/modules/rp.ko" "${BRP_URD_DIR}/usr/lib/modules/rp-dis.ko" \
-      || pr_crit "Failed to move RedPill LKM"
-  fi
+  # Handle debug flags for core ramdisk
   if [ "${BRP_DEV_DISABLE_SB}" -eq 1 ]; then
       pr_warn "<DEV> Disabling mfgBIOS LKM"
       "${MV_PATH}" "${BRP_URD_DIR}/usr/lib/modules/synobios.ko" "${BRP_URD_DIR}/usr/lib/modules/synobios-dis.ko" \
         || pr_crit "Failed to move mfgBIOS LKM"
-    fi
+  fi
 
   # Finally, we can finish ramdisk modifications with repacking it
   readonly BRP_RD_COMPRESSED=$(brp_json_get_field "${BRP_REL_CONFIG_JSON}" "extra.compress_rd")
@@ -286,6 +337,67 @@ if [ ! -f "${BRP_RD_REPACK}" ]; then # do we even need to unpack-modify-repack t
 else
   pr_info "Found repacked ramdisk at \"%s\" - skipping patching & repacking" "${BRP_URD_DIR}"
 fi
+
+##### ADDTL RAMDISK LAYERS #############################################################################################
+readonly BRP_CUSTOM_DIR="${BRP_BUILD_DIR}/custom-initrd" # directory with custom initrd layer
+readonly BRP_CUSTOM_RD_NAME="custom.gz" # filename of custom initramfs file (it will be loaded by GRUB with this name)
+readonly BRP_CUSTOM_RD_PATH="${BRP_BUILD_DIR}/${BRP_CUSTOM_RD_NAME}" # custom layer path for build
+readonly RPT_IMG_EXTS_DIR="${BRP_CUSTOM_DIR}/exts" # this is hardcoded as patches have this path hardcoded
+
+pr_dbg "Creating custom initramfs layer structure"
+brp_mkdir "${BRP_CUSTOM_DIR}"
+brp_mkdir "${RPT_IMG_EXTS_DIR}"
+
+# Copy any extra files to the ramdisk
+brp_cp_from_list "${BRP_REL_CONFIG_JSON}" "extra.ramdisk_copy" BRP_RELEASE_PATHS "${BRP_CUSTOM_DIR}"
+if [[ "$(brp_json_has_field "${BRP_USER_CFG}" 'ramdisk_copy')" -eq 1 ]]; then
+  brp_cp_from_list "${BRP_USER_CFG}" "ramdisk_copy" BRP_USER_PATHS "${BRP_CUSTOM_DIR}"
+fi
+
+# Handle debug flags for custom ramdisk
+if [ "${BRP_DEV_DISABLE_RP}" -eq 1 ]; then
+  pr_warn "<DEV> Disabling RedPill LKM"
+  "${MV_PATH}" "${BRP_CUSTOM_DIR}/usr/lib/modules/rp.ko" "${BRP_CUSTOM_DIR}/usr/lib/modules/rp-dis.ko" \
+    || pr_crit "Failed to move RedPill LKM - did you forget to copy it in platform config?"
+fi
+
+
+# We deliberately copy extensions as the last thing as the dumper will error-out if someone tried to mess with its
+# directory (circumventing the extensions system)
+if [[ "${BRP_DEV_DISABLE_EXTS}" -ne 1 ]]; then
+  pr_process "Bundling extensions"
+  brp_mkdir "${RPT_IMG_EXTS_DIR}"
+  if [[ -z "${RPT_BUILD_EXTS}" ]]; then
+    pr_dbg "Dumping all extensions for %s to %s" "${BRP_REL_OS_ID}" "${RPT_IMG_EXTS_DIR}"
+    ( ./ext-manager.sh _dump_exts "${BRP_REL_OS_ID}" "${RPT_IMG_EXTS_DIR}")
+    if [[ $? -ne 0 ]]; then
+      pr_crit "Failed to dump all extensions for %s platform to %s - see errors above" "${BRP_REL_OS_ID}" "${RPT_IMG_EXTS_DIR}"
+    fi
+  else
+    pr_dbg "Dumping selected extensions (%s) for %s to %s" "${RPT_BUILD_EXTS}" "${BRP_REL_OS_ID}" "${RPT_IMG_EXTS_DIR}"
+    ( ./ext-manager.sh _dump_exts "${BRP_REL_OS_ID}" "${RPT_IMG_EXTS_DIR}" "${RPT_BUILD_EXTS}")
+    if [[ $? -ne 0 ]]; then
+      pr_crit "Failed to dump extensions selected (%s) for %s platform to %s - see errors above" \
+              "${RPT_BUILD_EXTS}" "${BRP_REL_OS_ID}" "${RPT_IMG_EXTS_DIR}"
+    fi
+  fi
+  pr_process_ok
+fi
+
+pr_process "Packing custom ramdisk layer to %s" "${BRP_CUSTOM_RD_PATH}"
+if [ "${BRP_RD_COMPRESSED}" == "true" ]; then
+  brp_pack_zrd "${BRP_CUSTOM_RD_PATH}" "${BRP_CUSTOM_DIR}"
+elif [ "${BRP_RD_COMPRESSED}" == "false" ]; then
+  brp_pack_cpiord "${BRP_CUSTOM_RD_PATH}" "${BRP_CUSTOM_DIR}"
+else
+  pr_crit "Invalid value for platform extra.compress_rd (expected bool, got \"%s\")" "${BRP_RD_COMPRESSED}"
+fi
+pr_process_ok
+
+# remove custom ramdisk layer in case the script is run again (to prevent stacking changes); this should happen even if
+# BRP_KEEP_BUILD is set!
+pr_dbg "Removing custom ramdisk layer files"
+"${RM_PATH}" -rf "${BRP_CUSTOM_DIR}" || pr_warn "Failed to remove custom ramdisk layer files %s" "${BRP_CUSTOM_DIR}"
 
 ##### PREPARE GRUB CONFIG ##############################################################################################
 readonly BRP_TMP_GRUB_CONF="${BRP_BUILD_DIR}/grub.cfg"
@@ -318,6 +430,7 @@ fi
 pr_dbg "Copying patched files"
 brp_cp_flat "${BRP_ZLINUX_PATCHED_FILE}" "${BRP_OUT_P1}/${BRP_ZLINMOD_NAME}"
 brp_cp_flat "${BRP_RD_REPACK}" "${BRP_OUT_P1}/${BRP_RDMOD_NAME}"
+brp_cp_flat "${BRP_CUSTOM_RD_PATH}" "${BRP_OUT_P1}/${BRP_CUSTOM_RD_NAME}"
 brp_cp_flat "${BRP_TMP_GRUB_CONF}" "${BRP_OUT_P1}/boot/grub/grub.cfg"
 pr_process_ok
 

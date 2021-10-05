@@ -1,6 +1,6 @@
 {
   "os": {
-    "id": "ds918+_25556",
+    "id": "ds918p_25556",
     "pat_url": "https://global.download.synology.com/download/DSM/release/6.2.4/25556/DSM_DS918%2B_25556.pat",
     "sha256": "ee021d9cd012a434578309845e3af999a43f81a7887ceec7319e6005ac5930d4"
   },
@@ -25,8 +25,8 @@
     ],
     "ramdisk": [
       "@@@COMMON@@@/ramdisk-001-disable-root-pwd.patch",
-      "@@@COMMON@@@/v6/ramdisk-002-init-script.patch",
-      "@@@COMMON@@@/v6/ramdisk-003-post-init-script.patch"
+      "@@@COMMON@@@/ramdisk-002-init-script-OLD-name.patch",
+      "@@@COMMON@@@/ramdisk-003-post-init-script-LOWER.patch"
     ]
   },
 
@@ -75,7 +75,7 @@
           "echo Loading Linux...",
           "linux /zImage @@@CMDLINE@@@",
           "echo Loading initramfs...",
-          "initrd /rd.gz",
+          "initrd /rd.gz /custom.gz",
           "echo Starting kernel with USB boot"
         ],
         "cmdline": {
@@ -91,7 +91,7 @@
           "echo Loading Linux...",
           "linux /zImage @@@CMDLINE@@@",
           "echo Loading initramfs...",
-          "initrd /rd.gz",
+          "initrd /rd.gz /custom.gz",
           "echo Starting kernel with SATA boot",
           "echo WARNING: SATA boot support on this platform is experimental!"
         ],
@@ -109,14 +109,7 @@
     "compress_rd": false,
     "ramdisk_copy": {
       "@@@EXT@@@/rp-lkm/redpill-linux-v4.4.59+.ko": "usr/lib/modules/rp.ko",
-      "@@@COMMON@@@/iosched-trampoline.sh": "sbin/modprobe",
-      "@@@EXT@@@/virtio-4.4.59+/virtio.ko": "lib/modules/",
-      "@@@EXT@@@/virtio-4.4.59+/virtio_ring.ko": "lib/modules/",
-      "@@@EXT@@@/virtio-4.4.59+/virtio_pci.ko": "lib/modules/",
-      "@@@EXT@@@/virtio-4.4.59+/virtio_blk.ko": "lib/modules/",
-      "@@@EXT@@@/virtio-4.4.59+/virtio_net.ko": "lib/modules/",
-      "@@@EXT@@@/virtio-4.4.59+/virtio_scsi.ko": "lib/modules/",
-      "@@@EXT@@@/virtio-4.4.59+/virtio_console.ko": "lib/modules/"
+      "@@@COMMON@@@/iosched-trampoline.sh": "usr/sbin/modprobe"
     },
     "bootp1_copy": {
       "@@@PAT@@@/GRUB_VER": "GRUB_VER",

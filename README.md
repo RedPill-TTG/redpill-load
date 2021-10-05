@@ -38,6 +38,9 @@ It will download all files needed and complain if something isn't right
 When asked for PAT file during OS installation you can use PAT file from `cache/` directory - it's downloaded from the
 official CDN automatically to build the loader anyway.
 
+## Extension
+In the current state a simple extension system is provided. See the [documentation document](docs/extensions-overview.md) 
+for details.
 
 ## Architecture
 The loader builder is very flexible and derives most of its behavior from config files. There are two main files used
@@ -47,8 +50,8 @@ while the code is run: platform config (`config/<hardware>/<OS version>/config.j
 For more detailed information go to [`FOR_DEVS.md`](./FOR_DEVS.md).
 
 ## Rough TODO
- - RP modules should be downloaded automatically from GH releases
- - Compile VirtIO and provide in a separate repos
- - Dev docs
- - Support for additional drivers packages like in Jun's loader
- - Docker
+ - RP modules should be downloaded automatically from GH releases [or actually RP-LKM should be an extension]
+ - Full docs
+ - Included Docker support
+ - Add functions to GRUB config to avoid duplication in configs
+ - Add info screen to GRUB boot

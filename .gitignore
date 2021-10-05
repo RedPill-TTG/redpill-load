@@ -10,3 +10,5 @@ email.patch
 .idea/
 ext/rp-lkm/
 !ext/rp-lkm/.gitkeep
+custom/
+!custom/.gitkeep
