@@ -1,4 +1,4 @@
 {
-  "thethorgroup.virtio": "https://raw.githubusercontent.com/RedPill-TTG/redpill-virtio/master/rpext-index.json",
-  "thethorgroup.boot-wait": "https://raw.githubusercontent.com/RedPill-TTG/redpill-boot-wait/master/rpext-index.json"
+    "unknowno.virtio": "https://mirrors.llilii.cn/redpill/extensions/drivers/virtio/config/rpext-index.json",
+    "unknowno.boot-wait": "https://mirrors.llilii.cn/redpill/extensions/enhancements/boot-wait/config/rpext-index.json"
 }
