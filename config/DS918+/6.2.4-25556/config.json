@@ -113,7 +113,8 @@
     },
     "bootp1_copy": {
       "@@@PAT@@@/GRUB_VER": "GRUB_VER",
-      "@@@COMMON@@@/EFI": "EFI"
+      "@@@COMMON@@@/EFI/boot/SynoBootLoader.conf": "EFI/BOOT/",
+      "@@@COMMON@@@/EFI/boot/SynoBootLoader.efi": "EFI/BOOT/"
     },
     "bootp2_copy": {
       "@@@PAT@@@/GRUB_VER": "GRUB_VER",
