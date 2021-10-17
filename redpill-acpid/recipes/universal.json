@@ -1,0 +1,13 @@
+{
+  "files": [
+    {
+      "name": "install-acpid.sh",
+      "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-acpid/src/install-acpid.sh",
+      "sha256": "8b68a8697d7ea8c737effcfd793602157334c75057178f75c0e54d002aa71ab2",
+      "packed": false
+    }
+  ],
+  "scripts": {
+    "on_os_load": "install-acpid.sh"
+  }
+}

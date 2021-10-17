@@ -1,0 +1,19 @@
+{
+  "id": "jumkey.acpid2",
+  "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-acpid/rpext-index.json",
+  "info": {
+    "name": "ACPI Daemon v2",
+    "description": "ACPI Daemon v2 that handles power button events",
+    "author_url": "https://sourceforge.net/projects/acpid2/",
+    "packer_url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-acpid",
+    "help_url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-acpid"
+  },
+  "releases": {
+    "ds3615xs_25556": "https://github.com/jumkey/redpill-load/raw/develop/redpill-acpid/recipes/empty.json",
+    "ds3615xs_41222": "https://github.com/jumkey/redpill-load/raw/develop/redpill-acpid/recipes/universal.json",
+    "ds3615xs_42218": "https://github.com/jumkey/redpill-load/raw/develop/redpill-acpid/recipes/universal.json",
+    "ds918p_25556": "https://github.com/jumkey/redpill-load/raw/develop/redpill-acpid/recipes/empty.json",
+    "ds918p_41890": "https://github.com/jumkey/redpill-load/raw/develop/redpill-acpid/recipes/universal.json",
+    "ds918p_42218": "https://github.com/jumkey/redpill-load/raw/develop/redpill-acpid/recipes/universal.json"
+  }
+}
