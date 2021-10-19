@@ -5,8 +5,7 @@
 
 # copy file
 #tar -zxvf /tmp/acpid.tar.gz -C /
-tar -zxvf /exts/jumkey.acpid2/acpid.tar.gz -C /tmpRoot/
-ls /tmpRoot/usr/sbin/acpid
+tar -zxvf acpid.tar.gz -C /tmpRoot/
 
 # enable
 #systemctl enable acpid.service
