@@ -1,0 +1,108 @@
+name: Make kernel bs patch
+
+on:
+  workflow_dispatch:
+    inputs:
+      pat-address:
+        description: 'Pat file URL'
+        required: true
+        default: 'https://global.download.synology.com/download/DSM/release/7.0.1/42218/DSM_DS918%2B_42218.pat'
+      toolchain:
+        description: 'DSM toolchain URL for repack zImage'
+        required: true
+        default: 'https://sourceforge.net/projects/dsgpl/files/Tool%20Chain/DSM%207.0.0%20Tool%20Chains/Intel%20x86%20Linux%204.4.180%20%28Apollolake%29/apollolake-gcc750_glibc226_x86_64-GPL.txz'
+      linux-src:
+        description: 'Linux kernel source URL for repack zImage'
+        required: true
+        default: 'https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.4.180.tar.xz'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Bulid
+        id: bulid-bsp
+        run: |
+          patfile=$(basename ${{github.event.inputs.pat-address}} | while read; do echo -e ${REPLY//%/\\x}; done)
+          echo "::set-output name=patfile::$patfile"
+          # install bsdiff
+          sudo apt-get install -y bsdiff
+
+          #ls -al $GITHUB_WORKSPACE/
+          mkdir /opt/build
+          mkdir /opt/dist
+          cd /opt/build
+          curl -L ${{github.event.inputs.pat-address}} -o ds.pat
+          curl -L ${{github.event.inputs.toolchain}} -o toolchain.txz
+          curl -L ${{github.event.inputs.linux-src}} -o linux.tar.xz
+          mkdir pat
+          tar xf ds.pat -C pat
+          mkdir toolchain
+          tar xf toolchain.txz -C toolchain
+          mkdir linux-src
+          tar xf linux.tar.xz --strip-components 1 -C linux-src
+
+          # extract vmlinux
+          ./linux-src/scripts/extract-vmlinux pat/zImage > vmlinux
+          # sha256
+          sha256sum ds.pat >> checksum.sha256
+          sha256sum pat/zImage >> checksum.sha256
+          sha256sum pat/rd.gz >> checksum.sha256
+          sha256sum vmlinux >> checksum.sha256
+          # patch vmlinux
+          # vmlinux_mod.bin
+          curl -L https://github.com/jumkey/dsm-research/raw/master/tools/common.php -o common.php
+          curl -L https://github.com/jumkey/dsm-research/raw/master/tools/patch-ramdisk-check.php -o patch-ramdisk-check.php
+          curl -L https://github.com/jumkey/dsm-research/raw/master/tools/patch-boot_params-check.php -o patch-boot_params-check.php
+          php patch-boot_params-check.php vmlinux vmlinux-mod
+          php patch-ramdisk-check.php vmlinux-mod vmlinux_mod.bin
+
+          git clone https://github.com/kiler129/recreate-zImage.git
+          chmod +x recreate-zImage/rebuild_kernel.sh
+          cd linux-src
+          # ---------- make zImage_mod
+          # Make file more anonymous
+          export KBUILD_BUILD_TIMESTAMP="1970/1/1 00:00:00"
+          export KBUILD_BUILD_USER="root"
+          export KBUILD_BUILD_HOST="localhost"
+          export KBUILD_BUILD_VERSION=0
+
+          export ARCH=x86_64
+          export CROSS_COMPILE=/opt/build/toolchain/x86_64-pc-linux-gnu/bin/x86_64-pc-linux-gnu-
+          #make olddefconfig
+          make defconfig
+          << see_below
+          make clean
+          sed -i 's/bzImage: vmlinux/bzImage: /' arch/x86/Makefile
+          make vmlinux -j4 || true # make some *.o inspire by UnknowO
+          cp ../vmlinux_mod.bin vmlinux # vmlinux_mod.bin is already stripped of debugging and comments, strippe again should be ok
+          make bzImage
+          sed -i 's/bzImage: /bzImage: vmlinux/' arch/x86/Makefile
+          cp arch/x86/boot/bzImage ../zImage_mod
+          make clean
+          see_below
+          # for DS3615xs
+          #sed -i 's/   -std=gnu89$/   -std=gnu89 $(call cc-option,-fno-PIE)/' Makefile
+          sed -i 's/ ld -/ ${CROSS_COMPILE}ld -/' ../recreate-zImage/rebuild_kernel.sh
+          sed -i 's/(ld -/(${CROSS_COMPILE}ld -/' ../recreate-zImage/rebuild_kernel.sh
+          sed -i 's/ gcc / ${CROSS_COMPILE}gcc /' ../recreate-zImage/rebuild_kernel.sh
+          sed -i 's/ nm / ${CROSS_COMPILE}nm /' ../recreate-zImage/rebuild_kernel.sh
+          sed -i 's/ objcopy / ${CROSS_COMPILE}objcopy /' ../recreate-zImage/rebuild_kernel.sh
+          sed -i 's/(objdump /(${CROSS_COMPILE}objdump /' ../recreate-zImage/rebuild_kernel.sh
+          sed -i 's/ readelf / ${CROSS_COMPILE}readelf /' ../recreate-zImage/rebuild_kernel.sh
+          ../recreate-zImage/rebuild_kernel.sh $PWD/../linux-src ../vmlinux_mod.bin ../zImage_mod
+          # ----------
+          cd ..
+          bsdiff pat/zImage zImage_mod diff.bsp
+
+          echo '---copy file---'
+          cp vmlinux /opt/dist
+          cp vmlinux_mod.bin /opt/dist
+          cp diff.bsp /opt/dist
+          cp checksum.sha256 /opt/dist
+          echo '---END---'
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: kernel bs patch for ${{ steps.bulid-bsp.outputs.patfile }}
+          path: /opt/dist
