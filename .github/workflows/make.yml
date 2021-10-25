@@ -37,6 +37,13 @@ jobs:
           curl -L ${{github.event.inputs.linux-src}} -o linux.tar.xz
           mkdir pat
           tar xf ds.pat -C pat
+          # is update_pack
+          if [ ! -f "pat/zImage" ]; then
+            cd pat
+            ar x $(ls flashupdate*)
+            tar xf data.tar.xz
+            cd ..
+          fi
           mkdir toolchain
           tar xf toolchain.txz -C toolchain
           mkdir linux-src
