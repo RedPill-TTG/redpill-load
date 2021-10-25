@@ -71,6 +71,9 @@ jobs:
           export CROSS_COMPILE=/opt/build/toolchain/x86_64-pc-linux-gnu/bin/x86_64-pc-linux-gnu-
           #make olddefconfig
           make defconfig
+          # change to lzma
+          sed -i 's/CONFIG_KERNEL_GZIP=y/# CONFIG_KERNEL_GZIP is not set/' .config
+          sed -i 's/# CONFIG_KERNEL_LZMA is not set/CONFIG_KERNEL_LZMA=y/' .config
           << see_below
           make clean
           sed -i 's/bzImage: vmlinux/bzImage: /' arch/x86/Makefile
