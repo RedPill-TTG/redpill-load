@@ -1,0 +1,10 @@
+{
+  "extra_cmdline": {
+    "pid": "<fill-pid>",
+    "vid": "<fill-vid>",
+    "sn": "<fill-sn>",
+    "mac1": "<fill-mac>"
+  },
+  "synoinfo": {},
+  "ramdisk_copy": {}
+}
