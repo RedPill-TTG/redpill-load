@@ -25,6 +25,7 @@ system_tools=(
   [find]="find --version" # repacking ramdisks & finding empty trees
   [chmod]="chmod --version" # making sure executables are executable
   [dirname]="dirname --version" # creating directories from full paths
+  [dpkg]="dpkg --version" # extract flashupdate
 )
 typeset -A custom_tools
 custom_tools=(
