@@ -205,6 +205,7 @@ if [ ! -d "${BRP_UPAT_DIR}" ]; then
 
   brp_verify_file_sha256 "${BRP_PAT_FILE}" "$(brp_json_get_field "${BRP_REL_CONFIG_JSON}" "os.sha256")"
   brp_unpack_tar "${BRP_PAT_FILE}" "${BRP_UPAT_DIR}"
+
 else
   pr_info "Found unpacked PAT at \"%s\" - skipping unpacking" "${BRP_UPAT_DIR}"
 fi
@@ -213,6 +214,16 @@ fi
 ##### LINUX KERNEL MODIFICATIONS #######################################################################################
 # Prepare Linux kernel image
 readonly BRP_ZLINUX_FILE=${BRP_UPAT_DIR}/$(brp_json_get_field "${BRP_REL_CONFIG_JSON}" 'files.zlinux.name')
+
+if [ ! -f "${BRP_ZLINUX_FILE}" ]; then
+          pr_info "No zimage in Unpacked PAT - Try to find flashupdate package" "${BRP_PAT_FILE}"
+          readonly BRP_FLASHUPDATE_DEBFILE=$( ls -d ${BRP_UPAT_DIR}/flashupdate_*.deb | head -n1 )
+          if [ -f "${BRP_FLASHUPDATE_DEBFILE}" ]; then
+                  pr_process "flashupdate found unpack"
+                  "${DPKG_PATH}" -x "${BRP_FLASHUPDATE_DEBFILE}" "${BRP_UPAT_DIR}"
+          fi
+  fi
+
 readonly BRP_ZLINUX_PATCHED_FILE="${BRP_BUILD_DIR}/zImage-patched"
 if [ ! -f "${BRP_ZLINUX_PATCHED_FILE}" ]; then
   # Using repack method to patch the kernel. This method assumes that it will be interrupted, someone will go and look
