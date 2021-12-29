@@ -1,0 +1,117 @@
+{
+  "os": {
+    "id": "ds3615xs_25556u2",
+    "pat_url": "https://global.download.synology.com/download/DSM/criticalupdate/update_pack/25556-2/synology_bromolow_3615xs.pat",
+    "sha256": "c8324ad9482e559b1bb4ed3d5db35f8b6e045479a5c071ff08c22a342e1a707c"
+  },
+
+  "files": {
+    "zlinux": {
+      "name": "zImage",
+      "sha256": "d6606cf894294813c6bd1ea72a6881baaf71ed69f5e0dbec5c3555ee0f7b6da9"
+    },
+    "ramdisk": {
+      "name": "rd.gz",
+      "sha256": "a62c300bbc69fbe81b6a1f47f27624ae302d4d1e29ad12cc1460af1ecbf87685"
+    },
+    "vmlinux": {
+      "sha256": "adc81da48d04f3c14ac6bb87884d345141d36f5271e326b8c2f957fb14971874"
+    }
+  },
+
+  "patches": {
+    "zlinux": [
+      "zImage-001-3615xs-25556u2-ramdisk-and-header.bsp"
+    ],
+    "ramdisk": [
+      "@@@COMMON@@@/ramdisk-001-disable-root-pwd.patch",
+      "@@@COMMON@@@/ramdisk-002-init-script-OLD-name.patch",
+      "@@@COMMON@@@/ramdisk-003-post-init-script-LOWER.patch"
+    ]
+  },
+  "synoinfo": {
+    "maxdisks": "15",
+    "internalportcfg": "0x78FF",
+    "esataportcfg": "0x0",
+    "usbportcfg": "0x8700",
+    "rss_server": "http://example.com/null.xml",
+    "rss_server_ssl": "https://example.com/null.xml",
+    "small_info_path": "https://example.com/null",
+    "updateurl": "http://example.com/",
+    "myds_region_api_base_url": "https://example.com"
+  },
+  "grub": {
+    "template": "@@@COMMON@@@/grub-template.conf",
+    "base_cmdline": {
+      "sn": "",
+      "vid": "0x46f4",
+      "pid": "0x0001",
+      "mac1": "",
+      "netif_num": 1,
+
+      "syno_hw_version": "DS3615xs",
+      "syno_hdd_powerup_seq": 0,
+      "HddHotplug": 0,
+      "vender_format_version": 2,
+      "console": "ttyS0,115200n8",
+      "withefi": null,
+      "elevator": "elevator",
+      "syno_port_thaw": 1,
+      "syno_hdd_detect": 0,
+      "root": "/dev/md0",
+      "earlycon": "uart8250,io,0x3f8,115200n8"
+    },
+    "menu_entries": {
+      "RedPill DS3615xs v6.2.4-25556 update 2 (USB, Verbose)": {
+        "options": [
+          "savedefault",
+          "set root=(hd0,msdos1)",
+          "echo Loading Linux...",
+          "linux /zImage @@@CMDLINE@@@",
+          "echo Loading initramfs...",
+          "initrd /rd.gz /custom.gz",
+          "echo Starting kernel with USB boot"
+        ],
+        "cmdline": {
+          "earlyprintk": null,
+          "loglevel": 15,
+          "log_buf_len": "32M"
+        }
+      },
+      "RedPill DS3615xs v6.2.4-25556 update 2 (SATA, Verbose)": {
+        "options": [
+          "savedefault",
+          "set root=(hd0,msdos1)",
+          "echo Loading Linux...",
+          "linux /zImage @@@CMDLINE@@@",
+          "echo Loading initramfs...",
+          "initrd /rd.gz /custom.gz",
+          "echo Starting kernel with SATA boot"
+        ],
+        "cmdline": {
+          "earlyprintk": null,
+          "loglevel": 15,
+          "synoboot_satadom": 1,
+          "log_buf_len": "32M"
+        }
+      }
+    }
+  },
+  "extra": {
+    "compress_rd": true,
+    "ramdisk_copy": {
+      "@@@EXT@@@/rp-lkm/redpill-linux-v3.10.105.ko": "usr/lib/modules/rp.ko",
+      "@@@COMMON@@@/iosched-trampoline.sh": "usr/sbin/modprobe"
+    },
+    "bootp1_copy": {
+      "@@@PAT@@@/GRUB_VER": "GRUB_VER"
+    },
+    "bootp2_copy": {
+      "@@@PAT@@@/GRUB_VER": "GRUB_VER",
+      "@@@PAT@@@/grub_cksum.syno": "grub_cksum.syno",
+      "@@@PAT@@@/rd.gz": "rd.gz",
+      "@@@PAT@@@/zImage": "zImage"
+    }
+  }
+}
+
