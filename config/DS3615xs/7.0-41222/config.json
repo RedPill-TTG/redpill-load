@@ -65,6 +65,7 @@
     "menu_entries": {
       "RedPill DS3615xs v7.0-41222 Beta (USB, Verbose)": {
         "options": [
+          "savedefault",
           "set root=(hd0,msdos1)",
           "echo Loading Linux...",
           "linux /zImage @@@CMDLINE@@@",
@@ -80,6 +81,7 @@
       },
       "RedPill DS3615xs v7.0-41222 Beta (SATA, Verbose)": {
         "options": [
+          "savedefault",
           "set root=(hd0,msdos1)",
           "echo Loading Linux...",
           "linux /zImage @@@CMDLINE@@@",
