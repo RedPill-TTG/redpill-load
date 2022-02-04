@@ -112,7 +112,7 @@
 		"bootp2_copy": {
 		  "@@@PAT@@@/GRUB_VER": "GRUB_VER",
 		  "@@@COMMON@@@/EFI": "EFI",
-	s	  "@@@PAT@@@/grub_cksum.syno": "grub_cksum.syno",
+		  "@@@PAT@@@/grub_cksum.syno": "grub_cksum.syno",
 		  "@@@PAT@@@/rd.gz": "rd.gz",
 		  "@@@PAT@@@/zImage": "zImage"
 		}
