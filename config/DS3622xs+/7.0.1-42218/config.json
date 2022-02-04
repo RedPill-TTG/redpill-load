@@ -1,28 +1,28 @@
 {
     "os": {
-        "id": "rs3617xsp_42218",
-        "pat_url": "https://cndl.synology.cn/download/DSM/release/7.0.1/42218/DSM_RS3617xs+_42218.pat",
-        "sha256": "0edccb3ef7946e2fb6ecd772c77a9a82437138df39cfffbf924121c5080e8d01"
+        "id": "ds3622xsp_42218",
+        "pat_url": "https://cndl.synology.cn/download/DSM/release/7.0.1/42218/DSM_DS3622xs+_42218.pat",
+        "sha256": "f38329b8cdc5824a8f01fb1e377d3b1b6bd23da365142a01e2158beff5b8a424"
     },
 
     "files": {
         "zlinux": {
             "name": "zImage",
-            "sha256": "28a75e0b680517d39374260eb981b8ca9ace8810b121a30b8036fa09cfcb77fc"
+            "sha256": "06964b68e5ccdedd4363dff3986f99686d3c9cb5225e8e4c3d840a1d9cd1330b"
         },
         "ramdisk": {
             "name": "rd.gz",
-            "sha256": "b311df4e549e3d1cc083f2150beed654792e8543463963ff382d782af11dd418"
+            "sha256": "a95d4ab06189460f3b3d13a33e421887b5f3ea09a10535ae0d4c92beb7ff631d"
         },
         "vmlinux": {
-            "sha256": "74ff31a80a99d42974470a83cea20961bd4e294c525eefd0770fa0575f755ada"
+            "sha256": "0c5e4da2e3745a6ae7d63787442dbd2c3b2239bce857f0451e9e87bbc6456b15"
         }
     },
 
     "patches": {
         "_comment": ".bsp patches are applied to FILES using bspatch(1); .patch are applied to DIRECTORIES using patch(1)",
         "zlinux": [
-            "zImage-001-3617xs+-42218-ramdisk-and-header.bsp"
+            "zImage-001-3622xs+-42218-ramdisk-and-header.bsp"
         ],
         "ramdisk": [
             "@@@COMMON@@@/ramdisk-001-disable-root-pwd.patch",
@@ -50,7 +50,7 @@
             "mac1": "",
             "netif_num": 1,
 
-            "syno_hw_version": "RS3617xs+",
+            "syno_hw_version": "DS3622xs+",
             "syno_hdd_powerup_seq": 0,
             "HddHotplug": 0,
             "vender_format_version": 2,
@@ -63,7 +63,7 @@
             "earlycon": "uart8250,io,0x3f8,115200n8"
         },
         "menu_entries": {
-            "RedPill RS3617xs v7.0.1-42218 Beta (USB, Verbose)": {
+            "RedPill DS3622xs v7.0.1-42218 Beta (USB, Verbose)": {
                 "options": [
                     "savedefault",
                     "set root=(hd0,msdos1)",
@@ -79,7 +79,7 @@
                     "log_buf_len": "32M"
                 }
             },
-            "RedPill RS3617xs v7.0.1-42218 Beta (SATA, Verbose)": {
+            "RedPill DS3622xs v7.0.1-42218 Beta (SATA, Verbose)": {
                 "options": [
                     "savedefault",
                     "set root=(hd0,msdos1)",
@@ -112,7 +112,7 @@
 		"bootp2_copy": {
 		  "@@@PAT@@@/GRUB_VER": "GRUB_VER",
 		  "@@@COMMON@@@/EFI": "EFI",
-		  "@@@PAT@@@/grub_cksum.syno": "grub_cksum.syno",
+	s	  "@@@PAT@@@/grub_cksum.syno": "grub_cksum.syno",
 		  "@@@PAT@@@/rd.gz": "rd.gz",
 		  "@@@PAT@@@/zImage": "zImage"
 		}
