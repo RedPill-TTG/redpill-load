@@ -24,3 +24,5 @@
 +(/bin/sh /exts/exec.sh load_kmods && /bin/sh /exts/exec.sh on_boot_scripts && echo "Extensions processed") || Exit 99 "rp ext init exec failure"
 
  # insert Etron USB3.0 drivers
+
+https://github.com/dogodefi/redpill-load/blob/develop/config/_common/v7.0.1/ramdisk-002-init-script.patch
