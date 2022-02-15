@@ -1,19 +1,19 @@
 --- a/linuxrc.syno.impl
 +++ b/linuxrc.syno.impl
 @@ -129,7 +129,6 @@ if [ "DVA1622" = "${HW_VERSION}" ]; then
-        SYNOLoadHDMIAudio
+ 	SYNOLoadHDMIAudio
  fi
-
+ 
 -if [ "$SupportSAS" = "yes" ]; then
-        echo "Insert SAS controller driver"
-        #insert SAS6Gb driver
-        if [ -e ${SAS2Driver} ]; then
+ 	echo "Insert SAS controller driver"
+ 	#insert SAS6Gb driver
+ 	if [ -e ${SAS2Driver} ]; then
 @@ -145,7 +144,6 @@ if [ "$SupportSAS" = "yes" ]; then
-        fi
-        #wait 1 sec for drivers and disks to be ready
-        sleep 1
+ 	fi
+ 	#wait 1 sec for drivers and disks to be ready
+ 	sleep 1
 -fi
-
+ 
  if [ "broadwell" = "$UniqueRD" -o "broadwellnk" = "$UniqueRD" -o "coffeelake" = "$UniqueRD" -o "skylaked" = "$UniqueRD" -o "v1000" = "$UniqueRD" -o "icelaked" = "$UniqueRD" ]; then
          echo "Insert Marvell 1475 SATA controller driver"
 @@ -155,6 +153,8 @@ fi
@@ -22,6 +22,6 @@
  SYNOLoadModules $USB_MODULES
 +SYNOLoadModules "usb-storage"
 +(/bin/sh /exts/exec.sh load_kmods && /bin/sh /exts/exec.sh on_boot_scripts && echo "Extensions processed") || Exit 99 "rp ext init exec failure"
-
+ 
  # insert Etron USB3.0 drivers
-
+ 
