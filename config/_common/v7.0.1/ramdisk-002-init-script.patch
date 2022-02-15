@@ -16,11 +16,3 @@
 
  if [ "broadwell" = "$UniqueRD" -o "broadwellnk" = "$UniqueRD" -o "coffeelake" = "$UniqueRD" -o "skylaked" = "$UniqueRD" -o "v1000" = "$UniqueRD" -o "icelaked" = "$UniqueRD" ]; then
          echo "Insert Marvell 1475 SATA controller driver"
-@@ -155,6 +153,8 @@ fi
- # insert basic USB modules for detect f401/FDT
- echo "Insert basic USB modules..."
- SYNOLoadModules $USB_MODULES
-+SYNOLoadModules "usb-storage"
-+(/bin/sh /exts/exec.sh load_kmods && /bin/sh /exts/exec.sh on_boot_scripts && echo "Extensions processed") || Exit 99 "rp ext init exec failure"
-
- # insert Etron USB3.0 drivers
