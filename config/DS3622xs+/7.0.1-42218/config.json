@@ -35,6 +35,7 @@
     "synoinfo": {
         "maxdisks": "15",
 	"support_bde_internal_10g": "no",
+	"support_disk_compatibility": "no",
         "internalportcfg": "0x78FF",
         "esataportcfg": "0x0",
         "usbportcfg": "0x8700",
