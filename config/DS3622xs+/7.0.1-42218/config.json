@@ -55,9 +55,9 @@
             "sn": "",
             "vid": "0x46f4",
             "pid": "0x0001",
-	     "SasIdxMap": "0",
-    	     "SataPortMap": "4", 
-             "DiskIdxMap": "0",
+	    "SasIdxMap": "0",
+    	    "SataPortMap": "1", 
+            "DiskIdxMap": "0",
             "mac1": "",
             "netif_num": 1,
 
