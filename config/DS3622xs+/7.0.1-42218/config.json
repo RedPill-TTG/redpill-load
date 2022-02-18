@@ -36,6 +36,8 @@
         "maxdisks": "25",
 	"support_bde_internal_10g": "no",
 	"support_disk_compatibility": "no",
+	"supportraidgroup": "",
+	"support_syno_hybrid_raid": "yes",
 	"internalportcfg": "0xFFFF",
         "esataportcfg": "0x00",
         "rss_server": "http://example.com/null.xml",
