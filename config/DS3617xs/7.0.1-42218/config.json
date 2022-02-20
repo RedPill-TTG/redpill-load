@@ -27,7 +27,8 @@
     "ramdisk": [
       "@@@COMMON@@@/ramdisk-001-disable-root-pwd.patch",
       "@@@COMMON@@@/v7.0.1/ramdisk-002-init-script.patch",
-      "@@@COMMON@@@/v7.0.1/ramdisk-003-post-init-script.patch"
+      "@@@COMMON@@@/v7.0.1/ramdisk-003-post-init-script.patch",
+      "@@@COMMON@@@/v7.0.1/ramdisk-004-network-hosts.patch"
     ]
   },
   "synoinfo": {
@@ -35,11 +36,15 @@
     "internalportcfg": "0x78FF",
     "esataportcfg": "0x0",
     "usbportcfg": "0x8700",
-    "rss_server": "http://example.com/null.xml",
-    "rss_server_ssl": "https://example.com/null.xml",
-    "small_info_path": "https://example.com/null",
+    "rss_server": "http://example.com/autoupdate/genRSS.php",
+    "rss_server_ssl": "https://example.com/autoupdate/genRSS.php",
+    "rss_server_v2": "https://example.com/autoupdate/v2/getList",
+    "security_version_server": "https://example.com/securityVersion",
+    "small_info_path": "https://example.com/smallupdate",
+    "update_server": "http://example.com/",
+    "update_server_ssl": "https//example.com/",
     "updateurl": "http://example.com/",
-    "myds_region_api_base_url": "https://example.com"
+    "myds_region_api_base_url": "https://example.com/"
   },
   "grub": {
     "template": "@@@COMMON@@@/grub-template.conf",
@@ -63,7 +68,7 @@
       "earlycon": "uart8250,io,0x3f8,115200n8"
     },
     "menu_entries": {
-      "RedPill DS3617xs v7.0.1-42218 Beta (USB, Verbose)": {
+      "RedPill DS3617xs v7.0.1-42218 (USB, Verbose)": {
         "options": [
           "savedefault",
           "set root=(hd0,msdos1)",
@@ -79,7 +84,7 @@
           "log_buf_len": "32M"
         }
       },
-      "RedPill DS3617xs v7.0.1-42218 Beta (SATA, Verbose)": {
+      "RedPill DS3617xs v7.0.1-42218 (SATA, Verbose)": {
         "options": [
           "savedefault",
           "set root=(hd0,msdos1)",
