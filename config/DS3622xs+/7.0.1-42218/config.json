@@ -27,20 +27,26 @@
     "ramdisk": [
       "@@@COMMON@@@/ramdisk-001-disable-root-pwd.patch",
       "@@@COMMON@@@/v7.0.1/ramdisk-002-init-script.patch",
-      "@@@COMMON@@@/v7.0.1/ramdisk-003-post-init-script.patch"
+      "@@@COMMON@@@/v7.0.1/ramdisk-003-post-init-script.patch",
+      "@@@COMMON@@@/v7.0.1/ramdisk-004-network-hosts.patch"
     ]
   },
 
   "synoinfo": {
-    "maxdisks": "15",
-    "internalportcfg": "0x78FF",
+    "maxdisks": "25",
+    "internalportcfg": "0xffff",
     "esataportcfg": "0x0",
-    "usbportcfg": "0x8700",
-    "rss_server": "http://example.com/null.xml",
-    "rss_server_ssl": "https://example.com/null.xml",
-    "small_info_path": "https://example.com/null",
+    "support_bde_internal_10g": "no",
+    "support_disk_compatibility": "no",
+    "rss_server": "http://example.com/autoupdate/genRSS.php",
+    "rss_server_ssl": "https://example.com/autoupdate/genRSS.php",
+    "rss_server_v2": "https://example.com/autoupdate/v2/getList",
+    "security_version_server": "https://example.com/securityVersion",
+    "small_info_path": "https://example.com/smallupdate",
+    "update_server": "http://example.com/",
+    "update_server_ssl": "https//example.com/",
     "updateurl": "http://example.com/",
-    "myds_region_api_base_url": "https://example.com"
+    "myds_region_api_base_url": "https://example.com/"
   },
 
   "grub": {
