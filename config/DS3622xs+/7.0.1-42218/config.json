@@ -32,13 +32,14 @@
         ]
     },
     "synoinfo": {
-        "maxdisks": "25",
+        "maxdisks": "24",
 	"support_bde_internal_10g": "no",
 	"support_disk_compatibility": "no",
 	"supportraidgroup": "no",
 	"support_syno_hybrid_raid": "yes",
-	"internalportcfg": "0xFFFF",
-        "esataportcfg": "0x00",
+	"internalportcfg": "0xffffff",
+        "esataportcfg": "0xff000000",
+	"usbportcfg": "0xf00000000",  
         "rss_server": "http://example.com/null.xml",
         "rss_server_ssl": "https://example.com/null.xml",
         "small_info_path": "https://example.com/null",
