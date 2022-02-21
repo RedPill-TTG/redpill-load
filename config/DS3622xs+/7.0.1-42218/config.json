@@ -38,6 +38,7 @@
 	"supportraidgroup": "no",
 	"support_syno_hybrid_raid": "yes",
 	"internalportcfg": "0xffffff",
+	"SasIdxMap": "0",
         "esataportcfg": "0xff000000",
 	"usbportcfg": "0xf00000000",  
         "rss_server": "http://example.com/null.xml",
