@@ -9,6 +9,7 @@
     "help_url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb"
   },
   "releases": {
-    "ds920p_42218": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/recipes/universal.json"
+    "ds920p_42218": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/recipes/universal.json",
+    "ds920p_42550": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/recipes/universal.json"
   }
 }

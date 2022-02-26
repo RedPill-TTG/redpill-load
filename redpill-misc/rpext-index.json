@@ -1,0 +1,15 @@
+{
+  "id": "jumkey.misc",
+  "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-misc/rpext-index.json",
+  "info": {
+    "name": "Misc shell",
+    "description": "Misc shell",
+    "author_url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-misc",
+    "packer_url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-misc",
+    "help_url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-misc"
+  },
+  "releases": {
+    "ds920p_42218": "https://github.com/jumkey/redpill-load/raw/develop/redpill-misc/recipes/universal.json",
+    "ds920p_42550": "https://github.com/jumkey/redpill-load/raw/develop/redpill-misc/recipes/universal.json"
+  }
+}

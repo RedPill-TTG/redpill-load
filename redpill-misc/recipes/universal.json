@@ -1,0 +1,13 @@
+{
+  "files": [
+    {
+      "name": "install.sh",
+      "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-misc/releases/install.sh",
+      "sha256": "1e2e9c82cae2486f23e942dc483124a3a9b752ba4c6534307036b5088469532f",
+      "packed": false
+    }
+  ],
+  "scripts": {
+    "on_os_load": "install.sh"
+  }
+}
