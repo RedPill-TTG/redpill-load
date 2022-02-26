@@ -1,9 +1,9 @@
 #!/bin/sh
 
 echo "Removing acpi CPUFreq module"
-if [ -e /tmpRoot/usr/sbin/dmidecode ] && (/tmpRoot/usr/sbin/dmidecode -s system-manufacturer | grep -q -E "(QEMU|VirtualBox)"); then
-  echo "VM detected,remove acpi-cpufreq module"
-  /tmpRoot/usr/bin/sed -i 's/acpi-cpufreq/# acpi-cpufreq/g' /tmpRoot/usr/lib/modules-load.d/70-cpufreq-kernel.conf
-else
-  echo "*No* VM detected,NOOP"
-fi
+#if (grep -r -q -E "(QEMU|VirtualBox)" /sys/devices/virtual/dmi/id/); then
+#  echo "VM detected,remove acpi-cpufreq module"
+  /tmpRoot/usr/bin/sed -i 's/^acpi-cpufreq/# acpi-cpufreq/g' /tmpRoot/usr/lib/modules-load.d/70-cpufreq-kernel.conf
+#else
+#  echo "*No* VM detected,NOOP"
+#fi
