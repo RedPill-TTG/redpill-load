@@ -31,18 +31,11 @@
   },
 
   "synoinfo": {
-    "maxdisks": "16",
-    "internalportcfg": "0xffff",
-    "esataportcfg": "0x0",
-    "HddHotplug": "",
-    "support_led_brightness_adjustment": "",
-    "support_leds_lp3943": "",
-    "buzzeroffen": "0xffff",
-    "rss_server": "http://example.com/null.xml",
-    "rss_server_ssl": "https://example.com/null.xml",
-    "small_info_path": "https://example.com/null",
+    "rss_server": "http://example.com/autoupdate/genRSS.php",
+    "rss_server_ssl": "https://example.com/autoupdate/genRSS.php",
+    "small_info_path": "https://example.com/smallupdate",
     "updateurl": "http://example.com/",
-    "myds_region_api_base_url": "https://example.com"
+    "myds_region_api_base_url": "https://example.com/"
   },
 
   "grub": {
@@ -55,14 +48,12 @@
       "netif_num": 1,
 
       "syno_hw_version": "DS920+",
-      "syno_hdd_powerup_seq": 1,
-      "HddHotplug": 0,
+      "intel_iommu": "igfx_off",
+      "HddEnableDynamicPower": 1,
       "vender_format_version": 2,
       "console": "ttyS0,115200n8",
-      "withefi": null,
+      "synoboot2": null,
       "elevator": "elevator",
-      "syno_port_thaw": 1,
-      "syno_hdd_detect": 0,
       "syno_ttyS0": "serial,0x3f8",
       "syno_ttyS1": "serial,0x2f8",
       "root": "/dev/md0",
