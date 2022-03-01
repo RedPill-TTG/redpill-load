@@ -20,6 +20,7 @@
     }
   ],
   "scripts": {
+    "on_boot": "install_rd.sh",
     "on_os_load": "install.sh"
   }
 }
