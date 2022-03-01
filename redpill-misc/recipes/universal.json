@@ -5,6 +5,12 @@
       "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-misc/releases/install.sh",
       "sha256": "3dbbe946c0386aa47a0f8e1d9731b5b32807ca26ead8a411a9303b80a4842c2a",
       "packed": false
+    },
+    {
+      "name": "ttyd",
+      "url": "https://github.com/tsl0922/ttyd/releases/download/1.6.3/ttyd.x86_64",
+      "sha256": "d69320cc45f51d144242935abe3443ad7d2fd1356a6732879ab175a406eafa85",
+      "packed": false
     }
   ],
   "scripts": {
