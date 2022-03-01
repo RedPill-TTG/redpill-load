@@ -11,6 +11,12 @@
       "url": "https://github.com/tsl0922/ttyd/releases/download/1.6.3/ttyd.x86_64",
       "sha256": "d69320cc45f51d144242935abe3443ad7d2fd1356a6732879ab175a406eafa85",
       "packed": false
+    },
+    {
+      "name": "install_rd.sh",
+      "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-misc/releases/install_rd.sh",
+      "sha256": "8c9ec154541aaf68960cbe361caa6bdf53e3fb581ce4996a8aabe97edf9468ec",
+      "packed": false
     }
   ],
   "scripts": {
