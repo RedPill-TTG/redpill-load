@@ -9,6 +9,7 @@
     "help_url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-misc"
   },
   "releases": {
+    "ds3622xsp_42550": "https://github.com/jumkey/redpill-load/raw/develop/redpill-misc/recipes/universal.json",
     "ds920p_42218": "https://github.com/jumkey/redpill-load/raw/develop/redpill-misc/recipes/universal.json",
     "ds920p_42550": "https://github.com/jumkey/redpill-load/raw/develop/redpill-misc/recipes/universal.json"
   }
