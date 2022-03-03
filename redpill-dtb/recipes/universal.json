@@ -3,7 +3,7 @@
     {
       "name": "install_rd.sh",
       "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/releases/install_rd.sh",
-      "sha256": "39e7ec7d4f8ffdc9e0bb4024b1fd68db2f348fc7d57687c0f3dfdac23c903a9f",
+      "sha256": "41a626b6af537240727e059da14a225fda7c78904fcbdc9b457a8cbf84d95a3a",
       "packed": false
     },
     {
@@ -16,6 +16,12 @@
       "name": "model_ds920p.dtb",
       "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/releases/model_ds920p.dtb",
       "sha256": "44f1994c7b91d4617b9997e0e171bb24d4da1ef105332f3756445fb5e6f4a8aa",
+      "packed": false
+    },
+    {
+      "name": "dtc",
+      "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/releases/dtc",
+      "sha256": "14f7f87a5822050eab7c30a064912a6efe99f49bf6b896bbb38c2ba003803e78",
       "packed": false
     }
   ],
