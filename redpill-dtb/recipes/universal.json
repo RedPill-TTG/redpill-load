@@ -19,6 +19,12 @@
       "packed": false
     },
     {
+      "name": "model_ds1621p.dtb",
+      "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/releases/model_ds1621p.dtb",
+      "sha256": "e045eabbc6ca98fb324b20ef8e973d310ef939a8d87d76bfb87674437beabcd4",
+      "packed": false
+    },
+    {
       "name": "dtc",
       "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/releases/dtc",
       "sha256": "14f7f87a5822050eab7c30a064912a6efe99f49bf6b896bbb38c2ba003803e78",
