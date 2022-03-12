@@ -11,6 +11,7 @@
   "releases": {
     "ds920p_42218": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/recipes/universal.json",
     "ds1621p_42218": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/recipes/universal.json",
+    "ds2422p_42218": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/recipes/universal.json",
     "ds920p_42550": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/recipes/universal.json"
   }
 }
