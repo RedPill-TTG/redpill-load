@@ -1,5 +1,5 @@
---- a/rc
-+++ b/rc
+--- a/etc/rc
++++ b/etc/rc
 @@ -113,7 +113,7 @@ ThisMachine=`uname -m`
  if [ $KERNEL_VCODE -ge "$(KernelVersionCode "2.6")" ]; then
         # 2.6 or 3.x
