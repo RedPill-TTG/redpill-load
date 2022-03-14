@@ -8,4 +8,4 @@
 +       NET_DRIVERS="${VXLAN_MODULES} dca e1000e i2c-algo-bit igb be2net r8168 i40e"
         if [ "kvmx64" = "$PLATFORM" ] || [ "nextkvmx64" = "$PLATFORM" ]; then
                 NET_DRIVERS="${VXLAN_MODULES} igbvf be2net ixgbevf i40evf"
-        fi
+    fi
