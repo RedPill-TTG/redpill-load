@@ -40,8 +40,8 @@ jobs:
           make ${{github.event.inputs.board}}_defconfig
           make
           cp -r /opt/buildroot/output/images /opt/firmware
-      - name : Upload buildroot-${{github.event.inputs.branches-tags}}-${{github.event.inputs.board}}
-        uses: actions/upload-artifact@master
+      - name: Upload buildroot-${{github.event.inputs.branches-tags}}-${{github.event.inputs.board}}
+        uses: actions/upload-artifact@v3
         with:
           name: buildroot-${{github.event.inputs.branches-tags}}-${{github.event.inputs.board}}
           path: /opt/firmware
