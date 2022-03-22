@@ -28,7 +28,6 @@
             "@@@COMMON@@@/ramdisk-001-disable-root-pwd.patch",
       	    "@@@COMMON@@@/v7.0.1/ramdisk-002-init-script.patch",
             "@@@COMMON@@@/v7.0.1/ramdisk-003-post-init-script.patch",
-	    "@@@COMMON@@@/v7.0.1/ramdisk-004-rc-script.patch",
 	    "@@@COMMON@@@/ramdisk-004-network-hosts.patch"
 		
         ]
