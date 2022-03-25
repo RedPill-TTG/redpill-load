@@ -73,7 +73,7 @@
             "earlycon": "uart8250,io,0x3f8,115200n8"
         },
         "menu_entries": {
-            "RedPill DS3622xs v7.1.0-42550 Beta (USB, Verbose)": {
+            "RedPill DS3622xs v7.1.0-42621 Beta (USB, Verbose)": {
                 "options": [
                     "savedefault",
                     "set root=(hd0,msdos1)",
@@ -89,7 +89,7 @@
                     "log_buf_len": "32M"
                 }
             },
-            "RedPill DS3622xs v7.1.0-42550 Beta (SATA, Verbose)": {
+            "RedPill DS3622xs v7.1.0-42621 Beta (SATA, Verbose)": {
                 "options": [
                     "savedefault",
                     "set root=(hd0,msdos1)",

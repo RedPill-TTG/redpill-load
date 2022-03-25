@@ -8,14 +8,14 @@
     "files": {
         "zlinux": {
             "name": "zImage",
-            "sha256": "e76c6f4e885df659698c5cb2dbba4749797dfa066260f72b62bcea6c9a0ed8b9"
+            "sha256": "cda2f32d66ecacd07cf2913f44defe2f60da236f3b4e439317eb025545a82fa4"
         },
         "ramdisk": {
             "name": "rd.gz",
-            "sha256": "77d06a64e80e1b79af34a4b3df13de02b3ec76ec0864012bfb6e41e69ab9545c"
+            "sha256": "a500f7d8d7dce7ddc013ec6985e4592934fff71cad4ff2a57caa35f94722b21e"
         },
         "vmlinux": {
-            "sha256": "8eecca448a6bea9a22e9488143212d610db560fe39c438929dd9c0ff49d37fc5"
+            "sha256": "c8412116940b28960bc2acc943a2e78ee87faa2341e7cd80d391dc102217264e"
         }
     },
 
