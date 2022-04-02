@@ -2,7 +2,7 @@
   "os": {
     "id": "ds3617xs_42621",
     "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42621/DSM_DS3617xs_42621.pat",
-    "sha256": "38043098001b40a415c0f7f329138635c32e533940c22126682e70007afa3a64"
+"sha256": "4d83cf89c2e20156f1afb361645e40b6ba869f42e473c2e984fbe1e7720be883"
   },
 
   "files": {
@@ -50,7 +50,7 @@
       "mac1": "",
       "netif_num": 1,
 
-      "syno_hw_version": "DS3615xs",
+      "syno_hw_version": "DS3617xs",
       "syno_hdd_powerup_seq": 0,
       "HddHotplug": 0,
       "vender_format_version": 2,
@@ -63,7 +63,7 @@
       "earlycon": "uart8250,io,0x3f8,115200n8"
     },
     "menu_entries": {
-      "RedPill DS3615xs v7.0-41222 Beta (USB, Verbose)": {
+      "RedPill DS3617xs v7.1-42621 Beta (USB, Verbose)": {
         "options": [
           "savedefault",
           "set root=(hd0,msdos1)",
@@ -79,7 +79,7 @@
           "log_buf_len": "32M"
         }
       },
-      "RedPill DS3615xs v7.0-41222 Beta (SATA, Verbose)": {
+      "RedPill DS3617xs v7.1-42621 Beta (SATA, Verbose)": {
         "options": [
           "savedefault",
           "set root=(hd0,msdos1)",
@@ -101,7 +101,7 @@
   "extra": {
     "compress_rd": false,
     "ramdisk_copy": {
-      "@@@EXT@@@/rp-lkm/redpill-linux-v3.10.108.ko": "usr/lib/modules/rp.ko",
+      "@@@EXT@@@/rp-lkm/redpill-linux-v4.4.180+.ko": "usr/lib/modules/rp.ko",
       "@@@COMMON@@@/iosched-trampoline.sh": "usr/sbin/modprobe"
     },
     "bootp1_copy": {
