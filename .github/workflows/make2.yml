@@ -1,4 +1,4 @@
-name: Make kernel bs patch
+name: Make kernel bs patch 71
 
 on:
   workflow_dispatch:
