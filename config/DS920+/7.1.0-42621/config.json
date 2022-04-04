@@ -55,16 +55,17 @@
       "netif_num": 1,
 
       "syno_hw_version": "DS920+",
-      "syno_hdd_powerup_seq": 1,
-      "HddHotplug": 0,
+      "intel_iommu": "igfx_off",
+      "HddEnableDynamicPower": 1,
       "vender_format_version": 2,
       "console": "ttyS0,115200n8",
-      "withefi": null,
+      "synoboot2": null,
       "elevator": "elevator",
-      "syno_port_thaw": 1,
-      "syno_hdd_detect": 0,
+      "syno_ttyS0": "serial,0x3f8",
+      "syno_ttyS1": "serial,0x2f8",
       "root": "/dev/md0",
       "earlycon": "uart8250,io,0x3f8,115200n8"
+
     },
 
     "menu_entries": {
