@@ -1,7 +1,7 @@
 {
   "os": {
-    "id": "ds918p_42621",
-    "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42621/DSM_DS918%2B_42621.pat",
+    "id": "ds920p_42621",
+    "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42621/DSM_DS920%2B_42621.pat",
     "sha256": "e7fa975757d5faa6a275b68b130e7fd552263157a39bc71507ea6f2f466bb359"
   },
 
@@ -54,7 +54,7 @@
       "mac1": "",
       "netif_num": 1,
 
-      "syno_hw_version": "DS918+",
+      "syno_hw_version": "DS920+",
       "syno_hdd_powerup_seq": 1,
       "HddHotplug": 0,
       "vender_format_version": 2,
@@ -68,7 +68,7 @@
     },
 
     "menu_entries": {
-      "RedPill DS918+ v7.0.1-42218 (USB, Verbose)": {
+      "RedPill DS920+ v7.1.0-42621 (USB, Verbose)": {
         "options": [
           "savedefault",
           "set root=(hd0,msdos1)",
@@ -84,7 +84,7 @@
           "log_buf_len": "32M"
         }
       },
-      "RedPill DS918+ v7.0.1-42218 (SATA, Verbose)": {
+      "RedPill DS920+ v7.1.0-42621 (SATA, Verbose)": {
         "options": [
           "savedefault",
           "set root=(hd0,msdos1)",
