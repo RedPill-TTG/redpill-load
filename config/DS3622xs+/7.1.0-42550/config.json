@@ -1,7 +1,7 @@
 {
     "os": {
         "id": "ds3622xsp_42550",
-        "pat_url": "ds.pat",
+        "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42550/DSM_DS3622xs%2B_42550.pat",
         "sha256": "30d1e57db3062e50275021c9550f650c54b9553c791b4d425634728f6b075040"
     },
 
