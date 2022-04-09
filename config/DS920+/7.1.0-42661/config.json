@@ -1,31 +1,27 @@
 {
   "os": {
-    "id": "ds920p_42550",
-<<<<<<< HEAD
-    "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42621/DSM_DS920%2B_42621.pat",
-=======
-    "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42550/DSM_DS920%2B_42550.pat",
->>>>>>> develop
-    "sha256": "41d787bc518c24ba2a044fbe7888738c61a719762628af68ad4b81a870b24f82"
+    "id": "ds920p_42661",
+    "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42661/DSM_DS920%2B_42661.pat",
+    "sha256": "126d7b9ffba9444fd1800922e95e5aeff4ffb2f0d0320cf5cb3c079be8624568"
   },
 
   "files": {
     "zlinux": {
       "name": "zImage",
-      "sha256": "8f99916a0f5ee0c28fe415ff3aa6587efb1dbd25829c5e74de1b7cd1db8d0b54"
+      "sha256": "1d0e5b76e08e3483f6bf06d23b5978ec498b855bde23db1f96f343db4c43337d"
     },
     "ramdisk": {
       "name": "rd.gz",
-      "sha256": "f220a687f37f16a942f53e7d99bbd30ea440d1ce7ad9dd1b77f85df0019a6c61"
+      "sha256": "c8ad44826c87e065a3b05f354a639c0a86cb2fa47b88e11949604d53f3e80048"
     },
     "vmlinux": {
-      "sha256": "6a5a04759407fbcf728b25d4a66229dc37e1ddc3445b5886cefe5cb2b8157480"
+      "sha256": "2be1ae55c3e5e247842257c7dc0a2e1a1b009c53ae5014ab65e7abf369cf119a"
     }
   },
 
   "patches": {
     "zlinux": [
-      "zImage-001-920p-42550-ramdisk-and-flag-NOP.bsp"
+      "zImage-001-920p-42661-ramdisk-and-flag-NOP.bsp"
     ],
     "ramdisk": [
       "@@@COMMON@@@/ramdisk-001-disable-root-pwd.patch",
@@ -35,11 +31,18 @@
   },
 
   "synoinfo": {
-    "rss_server": "http://example.com/autoupdate/genRSS.php",
-    "rss_server_ssl": "https://example.com/autoupdate/genRSS.php",
-    "small_info_path": "https://example.com/smallupdate",
+    "maxdisks": "16",
+    "internalportcfg": "0xffff",
+    "esataportcfg": "0x0",
+    "HddHotplug": "",
+    "support_led_brightness_adjustment": "",
+    "support_leds_lp3943": "",
+    "buzzeroffen": "0xffff",
+    "rss_server": "http://example.com/null.xml",
+    "rss_server_ssl": "https://example.com/null.xml",
+    "small_info_path": "https://example.com/null",
     "updateurl": "http://example.com/",
-    "myds_region_api_base_url": "https://example.com/"
+    "myds_region_api_base_url": "https://example.com"
   },
 
   "grub": {
@@ -62,10 +65,11 @@
       "syno_ttyS1": "serial,0x2f8",
       "root": "/dev/md0",
       "earlycon": "uart8250,io,0x3f8,115200n8"
+
     },
 
     "menu_entries": {
-      "RedPill DS920+ v7.1-42550 Beta (USB, Verbose)": {
+      "RedPill DS920+ v7.1.0-42661 (USB, Verbose)": {
         "options": [
           "savedefault",
           "set root=(hd0,msdos1)",
@@ -81,7 +85,7 @@
           "log_buf_len": "32M"
         }
       },
-      "RedPill DS920+ v7.1-42550 Beta (SATA, Verbose)": {
+      "RedPill DS920+ v7.1.0-42661 (SATA, Verbose)": {
         "options": [
           "savedefault",
           "set root=(hd0,msdos1)",

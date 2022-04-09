@@ -36,6 +36,9 @@
     "ds3622xsp_42550": "https://github.com/jumkey/redpill-load/raw/develop/redpill-virtio/recipes/ds3622xsp_41890.json",
     "ds3622xsp_42621": "https://github.com/jumkey/redpill-load/raw/develop/redpill-virtio/recipes/ds3622xsp_41890.json",
     "ds3622xsp_42661": "https://github.com/jumkey/redpill-load/raw/develop/redpill-virtio/recipes/ds3622xsp_41890.json"
+<<<<<<< HEAD
     
+=======
+>>>>>>> develop
   }
 }
