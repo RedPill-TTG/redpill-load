@@ -1,28 +1,28 @@
 {
   "os": {
-    "id": "ds3617xs_42621",
-    "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42621/DSM_DS3617xs_42621.pat",
-"sha256": "4d83cf89c2e20156f1afb361645e40b6ba869f42e473c2e984fbe1e7720be883"
+    "id": "ds3617xs_42661",
+    "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42661/DSM_DS3617xs_42661.pat",
+"sha256": "f298acd7c763b680ecfde0edf729cf355c52574ffb3045a5a0a79493889bfb43"
   },
 
   "files": {
     "zlinux": {
       "name": "zImage",
-      "sha256": "e8b576a87c017447b090f0f7c19db837df440bcd75cccdaa361f8d8e56145b87"
+      "sha256": "9598f66b75e5b303e571241696e02fe7c0add80f13564f8c6b8c0daaf3cb3018"
     },
     "ramdisk": {
       "name": "rd.gz",
-      "sha256": "3780472abec4ff741db650c7b32195e5976a5dc76c43ae0cd5eb810fa5dcd6ca"
+      "sha256": "da3c2a170fea24052d817cbc4bb5b610a5b05288758d746b60a294ed614239fb"
     },
     "vmlinux": {
-      "sha256": "65fdebe9b699f4b5482932df0ae0abb14ef38235a794ef8d651791b4fd08047e"
+      "sha256": "66283dbcf093a8aa29532b8dd24c71c2b78052194ad3bd4e5352cef0247037a1"
     }
   },
 
   "patches": {
     "_comment": ".bsp patches are applied to FILES using bspatch(1); .patch are applied to DIRECTORIES using patch(1)",
     "zlinux": [
-      "zImage-001-3617xs-42621-ramdisk-and-header.bsp"
+      "zImage-001-3617xs-42661-ramdisk-and-header.bsp"
     ],
     "ramdisk": [
       "@@@COMMON@@@/ramdisk-001-disable-root-pwd.patch",
@@ -63,7 +63,7 @@
       "earlycon": "uart8250,io,0x3f8,115200n8"
     },
     "menu_entries": {
-      "RedPill DS3617xs v7.1-42621 Beta (USB, Verbose)": {
+      "RedPill DS3617xs v7.1-42661 Beta (USB, Verbose)": {
         "options": [
           "savedefault",
           "set root=(hd0,msdos1)",
@@ -79,7 +79,7 @@
           "log_buf_len": "32M"
         }
       },
-      "RedPill DS3617xs v7.1-42621 Beta (SATA, Verbose)": {
+      "RedPill DS3617xs v7.1-42661 Beta (SATA, Verbose)": {
         "options": [
           "savedefault",
           "set root=(hd0,msdos1)",
@@ -116,4 +116,3 @@
     }
   }
 }
-
