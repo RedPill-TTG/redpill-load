@@ -102,7 +102,6 @@
     "compress_rd": false,
     "ramdisk_copy": {
       "@@@EXT@@@/rp-lkm/redpill-linux-v4.4.180+.ko": "usr/lib/modules/rp.ko",
-      "@@@EXT@@@/patches/70-cpufreq-kernel.conf": "/lib/modules-load.d/70-cpufreq-kernel.conf",
       "@@@COMMON@@@/iosched-trampoline.sh": "usr/sbin/modprobe"
     },
     "bootp1_copy": {
