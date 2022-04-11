@@ -1,6 +1,6 @@
 {
   "id": "jumkey.acpid2",
-  "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-acpid/rpext-index.json",
+  "url": "https://github.com/pocopico/redpill-load/raw/develop/redpill-acpid/rpext-index.json",
   "info": {
     "name": "ACPI Daemon v2",
     "description": "ACPI Daemon v2 that handles power button events",
