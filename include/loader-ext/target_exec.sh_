@@ -81,7 +81,7 @@ _load_kmods() {
       echo "Loading kmod #${_kmod_num} \"${kmod_file}\" for ${name} (args: ${_kmod_args})"
       # shellcheck disable=SC2086
       _kmodname="${kmod_file::-3}"
-      if [ $(lsmod | grep $_kmodname | wc -l) -eq 0 ]; then
+      if [ $(lsmod | grep -w $_kmodname | wc -l) -eq 0 ]; then
         (cd "${name}" && insmod "${kmod_file}" ${_kmod_args})
         if [ $? -ne 0 ]; then
           echo "ERROR: kernel extensions \"${kmod_file}\" from ${name} failed to load"
