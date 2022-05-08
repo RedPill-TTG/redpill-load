@@ -1,8 +1,8 @@
 {
   "os": {
     "id": "ds3615xs_42661",
-    "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42661/DSM_DS3615xs_42661.pat",
-    "sha256": "e5b708c9340219f657b2eaf6c0fc1c375613c7d4661e185e25bb6deb8aba32d8"
+    "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42661-1/DSM_DS3615xs_42661.pat",
+    "sha256": "1e95d8c63981bcf42ea2eaedfbc7acc4248ff16d129344453b7479953f9ad145"
   },
 
   "files": {

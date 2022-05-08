@@ -1,8 +1,8 @@
 {
     "os": {
         "id": "dva3221_42661",
-        "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42661-1/DSM_DVA3221_42661.pat",
-        "sha256": "ed3207db40b7bac4d96411378558193b7747ebe88f0fc9c26c59c0b5c688c359"
+        "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42661/DSM_DVA3221_42661.pat",
+        "sha256": "de4c39a704f1de227b8ed8cacfe1fb3694553743b3b2f29fc31379d4a2286b2b"
     },
 
     "files": {

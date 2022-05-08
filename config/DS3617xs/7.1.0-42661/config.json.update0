@@ -2,8 +2,8 @@
 {
   "os": {
     "id": "ds3617xs_42661",
-    "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42661-1/DSM_DS3617xs_42661.pat",
-"sha256": "0a5a243109098587569ab4153923f30025419740fb07d0ea856b06917247ab5c"
+    "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42661/DSM_DS3617xs_42661.pat",
+"sha256": "f298acd7c763b680ecfde0edf729cf355c52574ffb3045a5a0a79493889bfb43"
   },
 
   "files": {
