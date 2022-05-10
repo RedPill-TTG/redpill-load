@@ -1,8 +1,8 @@
 {
   "os": {
     "id": "ds920p_42661",
-    "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42661/DSM_DS920%2B_42661.pat",
-    "sha256": "126d7b9ffba9444fd1800922e95e5aeff4ffb2f0d0320cf5cb3c079be8624568"
+    "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42661-1/DSM_DS920%2B_42661.pat",
+    "sha256": "8076950fdad2ca58ea9b91a12584b9262830fe627794a0c4fc5861f819095261"
   },
 
   "files": {

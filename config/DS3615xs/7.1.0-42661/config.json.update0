@@ -1,34 +1,33 @@
-
 {
   "os": {
-    "id": "ds3617xs_42661",
-    "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42661-1/DSM_DS3617xs_42661.pat",
-"sha256": "0a5a243109098587569ab4153923f30025419740fb07d0ea856b06917247ab5c"
+    "id": "ds3615xs_42661",
+    "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42661/DSM_DS3615xs_42661.pat",
+    "sha256": "e5b708c9340219f657b2eaf6c0fc1c375613c7d4661e185e25bb6deb8aba32d8"
   },
 
   "files": {
     "zlinux": {
       "name": "zImage",
-      "sha256": "9598f66b75e5b303e571241696e02fe7c0add80f13564f8c6b8c0daaf3cb3018"
+      "sha256": "3017542c92232cb5477b0e11d82d708a9909320350b1740aab58359e85f82351"
     },
     "ramdisk": {
       "name": "rd.gz",
-      "sha256": "da3c2a170fea24052d817cbc4bb5b610a5b05288758d746b60a294ed614239fb"
+      "sha256": "8ee5df65bcfd25c3d1999262153dcff625714d98789bc8065e217773f8d070d8"
     },
     "vmlinux": {
-      "sha256": "66283dbcf093a8aa29532b8dd24c71c2b78052194ad3bd4e5352cef0247037a1"
+      "sha256": "ad4f98ed70ef9e69221630ef360713713861402befe8485907353b285a5401cc"
     }
   },
 
   "patches": {
     "_comment": ".bsp patches are applied to FILES using bspatch(1); .patch are applied to DIRECTORIES using patch(1)",
     "zlinux": [
-      "zImage-001-3617xs-42661-ramdisk-and-header.bsp"
+      "zImage-001-3615xs-42661-ramdisk-and-header.bsp"
     ],
     "ramdisk": [
       "@@@COMMON@@@/ramdisk-001-disable-root-pwd.patch",
-      "@@@COMMON@@@/ramdisk-002-init-script-NEW-name.patch",
-      "@@@COMMON@@@/ramdisk-003-post-init-script-UPPER.patch"
+      "@@@COMMON@@@/v7.0.1/ramdisk-002-init-script.patch",
+      "@@@COMMON@@@/v7.0.1/ramdisk-003-post-init-script.patch"
     ]
   },
   "synoinfo": {
@@ -51,7 +50,7 @@
       "mac1": "",
       "netif_num": 1,
 
-      "syno_hw_version": "DS3617xs",
+      "syno_hw_version": "DS3615xs",
       "syno_hdd_powerup_seq": 0,
       "HddHotplug": 0,
       "vender_format_version": 2,
@@ -64,7 +63,7 @@
       "earlycon": "uart8250,io,0x3f8,115200n8"
     },
     "menu_entries": {
-      "RedPill DS3617xs v7.1-42661 Beta (USB, Verbose)": {
+      "RedPill DS3615xs v7.1.0-42661 (USB, Verbose)": {
         "options": [
           "savedefault",
           "set root=(hd0,msdos1)",
@@ -80,7 +79,7 @@
           "log_buf_len": "32M"
         }
       },
-      "RedPill DS3617xs v7.1-42661 Beta (SATA, Verbose)": {
+      "RedPill DS3615xs v7.1.0-42661 (SATA, Verbose)": {
         "options": [
           "savedefault",
           "set root=(hd0,msdos1)",
@@ -102,17 +101,21 @@
   "extra": {
     "compress_rd": false,
     "ramdisk_copy": {
-      "@@@EXT@@@/rp-lkm/redpill-linux-v4.4.180+.ko": "usr/lib/modules/rp.ko",
+      "@@@EXT@@@/rp-lkm/redpill-linux-v3.10.108.ko": "usr/lib/modules/rp.ko",
       "@@@COMMON@@@/iosched-trampoline.sh": "usr/sbin/modprobe"
     },
     "bootp1_copy": {
-      "@@@PAT@@@/GRUB_VER": "GRUB_VER"
+      "@@@PAT@@@/GRUB_VER": "GRUB_VER",
+      "@@@COMMON@@@/EFI/boot/SynoBootLoader.conf": "EFI/BOOT/",
+      "@@@COMMON@@@/EFI/boot/SynoBootLoader.efi": "EFI/BOOT/"
     },
     "bootp2_copy": {
       "@@@PAT@@@/GRUB_VER": "GRUB_VER",
+      "@@@COMMON@@@/EFI": "EFI",
       "@@@PAT@@@/grub_cksum.syno": "grub_cksum.syno",
       "@@@PAT@@@/rd.gz": "rd.gz",
       "@@@PAT@@@/zImage": "zImage"
     }
   }
 }
+

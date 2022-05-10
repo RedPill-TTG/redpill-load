@@ -1,8 +1,8 @@
 {
   "os": {
     "id": "ds1621p_42661",
-    "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42661/DSM_DS1621%2B_42661.pat",
-    "sha256": "f23d6a74c90bf2184fb7b25c0f55169478fba04927b4ca7b81754cc2d4eee27a"
+    "pat_url": "https://global.download.synology.com/download/DSM/release/7.1/42661-1/DSM_DS1621%2B_42661.pat",
+    "sha256": "381077302a89398a9fb5ec516217578d6f33b0219fe95135e80fd93cddbf88c4"
   },
 
   "files": {
