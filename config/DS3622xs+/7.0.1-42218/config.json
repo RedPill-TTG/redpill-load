@@ -37,16 +37,7 @@
     "internalportcfg": "0xffff",
     "esataportcfg": "0x0",
     "support_bde_internal_10g": "no",
-    "support_disk_compatibility": "no",
-    "rss_server": "http://example.com/autoupdate/genRSS.php",
-    "rss_server_ssl": "https://example.com/autoupdate/genRSS.php",
-    "rss_server_v2": "https://example.com/autoupdate/v2/getList",
-    "security_version_server": "https://example.com/securityVersion",
-    "small_info_path": "https://example.com/smallupdate",
-    "update_server": "http://example.com/",
-    "update_server_ssl": "https//example.com/",
-    "updateurl": "http://example.com/",
-    "myds_region_api_base_url": "https://example.com/"
+    "support_disk_compatibility": "no"
   },
 
   "grub": {
@@ -72,6 +63,20 @@
     },
 
     "menu_entries": {
+      "Yet Another Jun’s Mod × RedPill DS3622xs+ v7.0.1-42218 (USB, Verbose)": {
+        "options": [
+          "savedefault",
+          "set root=(hd0,msdos1)",
+          "echo Loading Linux...",
+          "linux /bzImage @@@CMDLINE@@@",
+          "echo Starting kernel with USB boot"
+        ],
+        "cmdline": {
+          "earlyprintk": null,
+          "loglevel": 15,
+          "log_buf_len": "32M"
+        }
+      },
       "RedPill DS3622xs+ v7.0.1-42218 (USB, Verbose)": {
         "options": [
           "savedefault",
@@ -115,6 +120,7 @@
       "@@@COMMON@@@/iosched-trampoline.sh": "usr/sbin/modprobe"
     },
     "bootp1_copy": {
+      "@@@COMMON@@@/bzImage": "bzImage",
       "@@@PAT@@@/GRUB_VER": "GRUB_VER",
       "@@@COMMON@@@/EFI/boot/SynoBootLoader.conf": "EFI/BOOT/",
       "@@@COMMON@@@/EFI/boot/SynoBootLoader.efi": "EFI/BOOT/"

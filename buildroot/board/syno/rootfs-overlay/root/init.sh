@@ -40,5 +40,6 @@ rm -rf ramdisk
 umount /temp1
 umount /temp2
 
-kexec -d --args-linux ./vmlinux.bin --type=elf-x86_64 --reuse-cmdline --initrd=./rd.gz
+# 启动
+kexec -d --args-linux ./zImage --type=bzImage64 --reuse-cmdline --initrd=./rd.gz
 kexec -d -e
