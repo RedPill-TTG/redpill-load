@@ -21,6 +21,7 @@
 
   "patches": {
     "zlinux": [
+      "zImage-001-1621p-42218-ramdisk-and-flag-NOP.bsp"
     ],
     "ramdisk": [
       "@@@COMMON@@@/ramdisk-001-disable-root-pwd.patch",
