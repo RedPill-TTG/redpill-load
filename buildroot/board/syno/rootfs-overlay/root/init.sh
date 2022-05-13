@@ -28,7 +28,7 @@ unlzma < /temp2/rd.gz | cpio -idmuv
 
 unlzma < /temp1/custom.gz | cpio -idmuv
 
-# make any modifications and recompress \/ 
+# rd.gz + custom.gz
 find . 2>/dev/null | cpio -o -H newc -R root:root | xz -9 --format=lzma > ../rd.gz
 
 cd ..
@@ -37,9 +37,13 @@ cd ..
 dd if=/dev/zero of=rd.gz bs=68 count=1 conv=notrunc oflag=append
 
 rm -rf ramdisk
+
+# rebuild zImage
+./vmlinux-to-bzImage.sh
+
 umount /temp1
 umount /temp2
 
-# 启动
+# start
 kexec -d --args-linux ./zImage --type=bzImage64 --reuse-cmdline --initrd=./rd.gz
 kexec -d -e
