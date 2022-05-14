@@ -39,7 +39,13 @@ dd if=/dev/zero of=rd.gz bs=68 count=1 conv=notrunc oflag=append
 rm -rf ramdisk
 
 # rebuild zImage
-./vmlinux-to-bzImage.sh
+if [[ -f "/temp1/tools/vmlinux-to-bzImage.sh" ]]; then
+  echo -n "Rebuilding zImage using external template..."
+  /temp1/tools/vmlinux-to-bzImage.sh
+else
+  echo -n "Rebuilding zImage... "
+  ./vmlinux-to-bzImage.sh
+fi
 
 umount /temp1
 umount /temp2
