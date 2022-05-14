@@ -114,6 +114,7 @@
       "@@@COMMON@@@/iosched-trampoline.sh": "usr/sbin/modprobe"
     },
     "bootp1_copy": {
+      "@@@COMMON@@@/tools": "tools",
       "@@@COMMON@@@/bzImage": "bzImage",
       "@@@PAT@@@/GRUB_VER": "GRUB_VER",
       "@@@COMMON@@@/EFI/boot/SynoBootLoader.conf": "EFI/BOOT/",
