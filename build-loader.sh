@@ -277,6 +277,8 @@ if [ ! -f "${BRP_RD_REPACK}" ]; then # do we even need to unpack-modify-repack t
   if [ "${BRP_JUN_MOD}" -eq 1 ]; then
     pushd ${BRP_URD_DIR}
     git init
+    git config user.name "Mona Lisa"
+    git config user.email "email@example.com"
     git add -A
     git commit -m "import ramdisk"
     git tag baseline
