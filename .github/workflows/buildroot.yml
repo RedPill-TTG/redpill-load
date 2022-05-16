@@ -36,7 +36,7 @@ jobs:
           git checkout ${{github.event.inputs.branches-tags}}
           git pull origin ${{github.event.inputs.branches-tags}}
           cp -rf /home/runner/work/redpill-load/redpill-load/buildroot/* .
-          chmod 777 /home/runner/work/redpill-load/redpill-load/buildroot/board/syno/rootfs-overlay/root/*.sh
+          chmod 777 board/syno/rootfs-overlay/root/*.sh
           echo '---start make---'
           make ${{github.event.inputs.board}}_defconfig
           make
