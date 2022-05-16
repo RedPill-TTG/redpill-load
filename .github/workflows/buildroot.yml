@@ -36,6 +36,7 @@ jobs:
           git checkout ${{github.event.inputs.branches-tags}}
           git pull origin ${{github.event.inputs.branches-tags}}
           cp -rf /home/runner/work/redpill-load/redpill-load/buildroot/* .
+          chmod 700 *.sh
           echo '---start make---'
           make ${{github.event.inputs.board}}_defconfig
           make
