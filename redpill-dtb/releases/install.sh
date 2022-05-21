@@ -1,4 +1,4 @@
 #!/bin/sh
 
 # copy file
-cp -vf model_${PLATFORM_ID%%_*}.dtb /tmpRoot/etc.defaults/model.dtb
+cp -vf /etc.defaults/model.dtb /tmpRoot/etc.defaults/model.dtb
