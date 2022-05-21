@@ -92,40 +92,6 @@
           "synoboot_satadom": 2,
           "log_buf_len": "32M"
         }
-      },
-      "RedPill DS918+ v7.0.1-42218 (USB, Verbose)": {
-        "options": [
-          "savedefault",
-          "set root=(hd0,msdos1)",
-          "echo Loading Linux...",
-          "linux /zImage @@@CMDLINE@@@",
-          "echo Loading initramfs...",
-          "initrd /rd.gz /custom.gz",
-          "echo Starting kernel with USB boot"
-        ],
-        "cmdline": {
-          "earlyprintk": null,
-          "loglevel": 15,
-          "log_buf_len": "32M"
-        }
-      },
-      "RedPill DS918+ v7.0.1-42218 (SATA, Verbose)": {
-        "options": [
-          "savedefault",
-          "set root=(hd0,msdos1)",
-          "echo Loading Linux...",
-          "linux /zImage @@@CMDLINE@@@",
-          "echo Loading initramfs...",
-          "initrd /rd.gz /custom.gz",
-          "echo Starting kernel with SATA boot",
-          "echo WARNING: SATA boot support on this platform is experimental!"
-        ],
-        "cmdline": {
-          "earlyprintk": null,
-          "loglevel": 15,
-          "synoboot_satadom": 2,
-          "log_buf_len": "32M"
-        }
       }
     }
   },
