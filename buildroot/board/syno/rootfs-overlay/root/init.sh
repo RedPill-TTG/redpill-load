@@ -11,7 +11,9 @@ get_synoboot() {
   local usbfs
   if [[ -v $3 ]]; then
     dev=$(udevadm trigger -v -n -s block -p ID_VENDOR_ID="$1" -p ID_MODEL_ID="$2" | head -n 1)
-    usbfs=/dev/"${dev##*/}"
+    if [[ ! "${dev}" = "" ]]; then
+      usbfs=/dev/"${dev##*/}"
+    fi
   else
     # satadom size <= 1024 MB or dom_szmax
     devs=$(find /sys/block/sd*)
@@ -47,7 +49,6 @@ cd "$(dirname "$0")" || exit
 mkdir /temp1
 mkdir /temp2
 
-declare usbfs
 usbfs=$(get_synoboot "$vid" "$pid" "$synoboot_satadom" "$dom_szmax")
 wait_time=30
 time_counter=0
@@ -58,6 +59,9 @@ while [ "${usbfs}" = "" ] && [ $time_counter -lt $wait_time ]; do
 done
 mount "${usbfs}"1 /temp1
 mount "${usbfs}"2 /temp2
+
+# found synoboot
+touch /temp1/found.txt
 
 sh bzImage-to-vmlinux.sh /temp2/zImage vmlinux
 
