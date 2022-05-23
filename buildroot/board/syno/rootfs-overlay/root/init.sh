@@ -9,7 +9,7 @@ fi
 # Args: $1 vid $2 pid $3 synoboot_satadom $4 dom_szmax
 get_synoboot() {
   local usbfs
-  if [[ -v $3 ]]; then
+  if [[ ${3:-"0"} = "0" ]]; then
     dev=$(udevadm trigger -v -n -s block -p ID_VENDOR_ID="$1" -p ID_MODEL_ID="$2" | head -n 1)
     if [[ ! "${dev}" = "" ]]; then
       usbfs=/dev/"${dev##*/}"
@@ -18,7 +18,7 @@ get_synoboot() {
     # satadom size <= 1024 MB or dom_szmax
     devs=$(find /sys/block/sd*)
     for dev in $devs; do
-      if [[ $(cat "$dev"/size) -le $((${4-1024} * 1024 * 1024 / 512)) ]]; then
+      if [[ $(cat "$dev"/size) -le $((${4:-1024} * 1024 * 1024 / 512)) ]]; then
         usbfs=/dev/"${dev##*/}"
         break
       fi
