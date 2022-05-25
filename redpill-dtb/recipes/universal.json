@@ -21,7 +21,7 @@
     {
       "name": "patch.tar.gz",
       "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/releases/patch.tar.gz",
-      "sha256": "1a0d1c81b8e3f9e5e1df902549bbd2b97270fb1395a79486bb0e04fcaf41e9eb",
+      "sha256": "a0518ef7d916f20f986192750e9b13b60a02a138c33caca65aa043c538c175b7",
       "packed": true
     }
   ],
