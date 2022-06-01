@@ -1,0 +1,21 @@
+{
+  "name": "dts-js",
+  "version": "1.0.0",
+  "description": "patch dts files",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "exec": "webpack && .\\qjs\\qjs --std .\\dist\\bundle.js out.dts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^5.72.1",
+    "webpack-cli": "^4.9.2"
+  },
+  "dependencies": {
+    "antlr4": "^4.10.1"
+  }
+}
