@@ -1,17 +1,17 @@
 [Unit]
 Description=ACPI Daemon
-After=network.target
+DefaultDependencies=no
+IgnoreOnIsolate=true
+After=multi-user.target
 
 [Service]
 Type=forking
-PIDFile=/var/run/acpid.pid
-ExecStart=/usr/sbin/acpid
-ExecReload=/bin/kill -HUP $MAINPID
 Restart=always
-TimeoutStopSec=45
-
-[Install]
-WantedBy=multi-user.target
+RestartSec=30
+PIDFile=/var/run/acpid.pid
+ExecStartPre=/sbin/modprobe button
+ExecStart=/usr/sbin/acpid
+ExecStopPost=/sbin/modprobe -r button
 
 [X-Synology]
-Name=ACPI
+Author=Virtualization Team
