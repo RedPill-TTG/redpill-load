@@ -78,12 +78,13 @@ unlzma </temp2/rd.gz | cpio -idmuv
 unlzma </temp1/custom.gz | cpio -idmuv
 
 # rd.gz + custom.gz
-find . 2>/dev/null | cpio -o -H newc -R root:root | xz -9 --format=lzma >../rd.gz
+#find . 2>/dev/null | cpio -o -H newc -R root:root | xz -9 --format=lzma >../rd.gz
+find . 2>/dev/null | cpio -o -H newc -R root:root >../rd.gz
 
 cd ..
 
 # add fake sign
-dd if=/dev/zero of=rd.gz bs=68 count=1 conv=notrunc oflag=append
+#dd if=/dev/zero of=rd.gz bs=68 count=1 conv=notrunc oflag=append
 
 rm -rf ramdisk
 
