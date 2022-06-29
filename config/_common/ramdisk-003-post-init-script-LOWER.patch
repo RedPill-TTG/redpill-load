@@ -6,7 +6,7 @@ functions or quotes in v7, to make diffing and management of these patches easie
 +++ b/usr/sbin/init.post
 @@ -18,5 +18,28 @@
  fi
- Mmount $RootDevice /tmpRoot -o barrier=1
+ mount $RootDevice /tmpRoot -o barrier=1
  
 +############################################################################################
 +SED_PATH='/tmpRoot/usr/bin/sed'

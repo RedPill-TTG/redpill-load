@@ -15,15 +15,14 @@ cd "$(dirname "${0}")" || exit 1 # get to the script directory realiably in POSI
 # Gets indirect variable (needed as POSIX sh/busybox doesn't support arrays)
 # Args: $1 ext number, $1 var name
 _get_ext_var() {
-    eval varval=\"\$EXT_$1_$2\"
-    echo "${varval}"
+  eval varval=\"\$EXT_$1_$2\"
+  echo "${varval}"
 }
 
 # Run single script
 # Args: $1 ext id | $2 script name
 # Return: exit code from script
-_run_script()
-{
+_run_script() {
   # the ./ part is crucial on newer versions of busybox - don't ask us why
   (cd "${1}" && PLATFORM_ID="${PLATFORM_ID}" EXT_ID="${1}" . "./${2}")
   return $?
@@ -31,12 +30,11 @@ _run_script()
 
 # Executes script category for all extensions
 # Args: $1 name of script action
-_run_scripts()
-{
+_run_scripts() {
   echo ":: Executing \"${1}\" custom scripts ..."
-  _ext_num=0;
-  _scr_exit=0;
-  _final_exit=0;
+  _ext_num=0
+  _scr_exit=0
+  _final_exit=0
   for name in ${EXTENSION_IDS}; do
     _script_name=$(_get_ext_var ${_ext_num} "scripts_$1")
     if [ ! -z ${_script_name} ]; then
@@ -49,7 +47,7 @@ _run_scripts()
         _final_exit=1
       fi
     fi
-    _ext_num=$((_ext_num+1))
+    _ext_num=$((_ext_num + 1))
   done
 
   if [ $_final_exit -ne 0 ]; then
@@ -62,10 +60,9 @@ _run_scripts()
 
 # Load all custom kernel modules
 # Args: <no arguments>
-_load_kmods()
-{
+_load_kmods() {
   echo ":: Loading kernel modules from extensions ..."
-  _ext_num=0;
+  _ext_num=0
   for name in ${EXTENSION_IDS}; do
     _kmods=$(_get_ext_var ${_ext_num} "kmod_files")
     _kmod_check=$(_get_ext_var ${_ext_num} "scripts_check_kmod")
@@ -73,43 +70,49 @@ _load_kmods()
       echo "Checking if kmods for ${name} should run using ${_kmod_check} script"
       if ! _run_script "${name}" "${_kmod_check}"; then
         echo "NOT loading kmods for ${name}"
-        _ext_num=$((_ext_num+1))
+        _ext_num=$((_ext_num + 1))
         continue
       fi
     fi
 
-    _kmod_num=0;
+    _kmod_num=0
     for kmod_file in ${_kmods}; do
       _kmod_args=$(_get_ext_var ${_ext_num} "kmod_${_kmod_num}_args")
       echo "Loading kmod #${_kmod_num} \"${kmod_file}\" for ${name} (args: ${_kmod_args})"
       # shellcheck disable=SC2086
-      (cd "${name}" && insmod "${kmod_file}" ${_kmod_args})
-      if [ $? -ne 0 ]; then
-        echo "ERROR: kernel extensions \"${kmod_file}\" from ${name} failed to load"
-        exit 1
+      _kmodname="${kmod_file::-3}"
+      if [ $(lsmod | grep -w $_kmodname | wc -l) -eq 0 ]; then
+        (cd "${name}" && insmod "${kmod_file}" ${_kmod_args})
+        if [ $? -ne 0 ]; then
+          echo "ERROR: kernel extensions \"${kmod_file}\" from ${name} failed to load"
+          exit 1
+        fi
+      else
+        echo "Module $_kmodname already loaded"
       fi
-      _kmod_num=$((_kmod_num+1))
+      _kmod_num=$((_kmod_num + 1))
     done
-    _ext_num=$((_ext_num+1))
+    _ext_num=$((_ext_num + 1))
   done
   echo ":: Loading kernel modules from extensions ... [  OK  ]"
 }
 
 case $1 in
-  load_kmods)
-    _load_kmods
-    ;;
-  on_boot_scripts)
-    _run_scripts 'on_boot'
-    ;;
-  on_os_load_scripts)
-    _run_scripts 'on_os_load'
-    ;;
-  *)
-    if [ $# -lt 1 ]; then
-      echo "Usage: $0 ACTION_NAME <...args>"
-    else
-      echo "Invalid ACTION_NAME=${1}"
-    fi
-    exit 1
+load_kmods)
+  _load_kmods
+  ;;
+on_boot_scripts)
+  _run_scripts 'on_boot'
+  ;;
+on_os_load_scripts)
+  _run_scripts 'on_os_load'
+  ;;
+*)
+  if [ $# -lt 1 ]; then
+    echo "Usage: $0 ACTION_NAME <...args>"
+  else
+    echo "Invalid ACTION_NAME=${1}"
+  fi
+  exit 1
+  ;;
 esac

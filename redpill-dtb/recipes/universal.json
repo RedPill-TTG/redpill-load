@@ -1,0 +1,44 @@
+{
+  "files": [
+    {
+      "name": "install_rd.sh",
+      "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/releases/install_rd.sh",
+      "sha256": "41a626b6af537240727e059da14a225fda7c78904fcbdc9b457a8cbf84d95a3a",
+      "packed": false
+    },
+    {
+      "name": "install.sh",
+      "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/releases/install.sh",
+      "sha256": "22e49bc661e1789af2634346fb1dd587dd00cc3ace9d91de9abfe3f77a371c39",
+      "packed": false
+    },
+    {
+      "name": "model_ds920p.dtb",
+      "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/releases/model_ds920p.dtb",
+      "sha256": "20dc3ceb58c42e192603a3bc2ea3875ec3629645360032488455399448dd7ea0",
+      "packed": false
+    },
+    {
+      "name": "model_ds1621p.dtb",
+      "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/releases/model_ds1621p.dtb",
+      "sha256": "e045eabbc6ca98fb324b20ef8e973d310ef939a8d87d76bfb87674437beabcd4",
+      "packed": false
+    },
+    {
+      "name": "model_ds2422p.dtb",
+      "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/releases/model_ds2422p.dtb",
+      "sha256": "b853bc937664e1867f341882731a6837d8a1ac45eabc37a7e4eeb148b8a63986",
+      "packed": false
+    },
+    {
+      "name": "dtc",
+      "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-dtb/releases/dtc",
+      "sha256": "14f7f87a5822050eab7c30a064912a6efe99f49bf6b896bbb38c2ba003803e78",
+      "packed": false
+    }
+  ],
+  "scripts": {
+    "on_boot": "install_rd.sh",
+    "on_os_load": "install.sh"
+  }
+}
