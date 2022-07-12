@@ -1,0 +1,14 @@
+/dts-v1/;
+
+/ {
+    a = "2";
+    internal_slot@1 {
+        ahci {
+            pcie_root = "00:11.0";
+            ata_port = <0x01>;
+        };
+    };
+    nvme_slot@1 {
+        pcie_root = "00:11.0";
+    };
+};

@@ -18,8 +18,10 @@ set -euo pipefail
 echo "Building images"
 BRP_DEBUG=1 BRP_USER_CFG=$PWD/user_config-ds3615.json ./build-loader.sh 'DS3615xs' '6.2.4-25556' "$PWD/images/rp-3615-v6$IMG_POSTFIX.img"
 BRP_DEBUG=1 BRP_USER_CFG=$PWD/user_config-ds3615.json ./build-loader.sh 'DS3615xs' '7.0-41222' "$PWD/images/rp-3615-v7$IMG_POSTFIX.img"
+BRP_JUN_MOD=1 BRP_DEBUG=1 BRP_USER_CFG=$PWD/user_config-ds3615.json ./build-loader.sh 'DS3615xs' '7.0.1-42218' "$PWD/images/rp-3615-v7.0.1$IMG_POSTFIX.img"
 BRP_DEBUG=1 BRP_USER_CFG=$PWD/user_config-ds918.json ./build-loader.sh 'DS918+' '6.2.4-25556' "$PWD/images/rp-918-v6$IMG_POSTFIX.img"
 BRP_DEBUG=1 BRP_USER_CFG=$PWD/user_config-ds918.json ./build-loader.sh 'DS918+' '7.0-41890' "$PWD/images/rp-918-v7$IMG_POSTFIX.img"
+BRP_JUN_MOD=1 BRP_DEBUG=1 BRP_USER_CFG=$PWD/user_config-ds918.json ./build-loader.sh 'DS918+' '7.0.1-42218' "$PWD/images/rp-918-v7.0.1$IMG_POSTFIX.img"
 
 
 echo "Generating VMDKs"
@@ -27,13 +29,17 @@ echo "Generating VMDKs"
 # Otherwise ESXi panel refuses to see these VMDKs (?!) and none of these work: https://stackoverflow.com/q/37794846
 qemu-img convert -f raw -O vmdk "$PWD/images/rp-3615-v6$IMG_POSTFIX.img" "$PWD/images/vrp-3615-v6$IMG_POSTFIX.vmdk"
 qemu-img convert -f raw -O vmdk "$PWD/images/rp-3615-v7$IMG_POSTFIX.img" "$PWD/images/vrp-3615-v7$IMG_POSTFIX.vmdk"
+qemu-img convert -f raw -O vmdk "$PWD/images/rp-3615-v7.0.1$IMG_POSTFIX.img" "$PWD/images/vrp-3615-v7.0.1$IMG_POSTFIX.vmdk"
 qemu-img convert -f raw -O vmdk "$PWD/images/rp-918-v6$IMG_POSTFIX.img" "$PWD/images/vrp-918-v6$IMG_POSTFIX.vmdk"
 qemu-img convert -f raw -O vmdk "$PWD/images/rp-918-v7$IMG_POSTFIX.img" "$PWD/images/vrp-918-v7$IMG_POSTFIX.vmdk"
+qemu-img convert -f raw -O vmdk "$PWD/images/rp-918-v7.0.1$IMG_POSTFIX.img" "$PWD/images/vrp-918-v7.0.1$IMG_POSTFIX.vmdk"
 
 echo "Packing raw images"
 gzip "$PWD/images/rp-3615-v6$IMG_POSTFIX.img"
 gzip "$PWD/images/rp-3615-v7$IMG_POSTFIX.img"
+gzip "$PWD/images/rp-3615-v7.0.1$IMG_POSTFIX.img"
 gzip "$PWD/images/rp-918-v6$IMG_POSTFIX.img"
 gzip "$PWD/images/rp-918-v7$IMG_POSTFIX.img"
+gzip "$PWD/images/rp-918-v7.0.1$IMG_POSTFIX.img"
 
 echo "OK"

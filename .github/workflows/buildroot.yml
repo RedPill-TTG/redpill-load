@@ -1,0 +1,47 @@
+name: buildroot
+
+on:
+  workflow_dispatch:
+    inputs:
+      git-address:
+        description: 'git-address'
+        required: true
+        default: 'https://github.com/buildroot/buildroot.git'
+      branches-tags:
+        description: 'branches-tags'
+        required: true
+        default: '2022.02'
+      board:
+        description: 'board'
+        required: true
+        default: 'syno'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Clone source code
+        run: |
+          git clone ${{github.event.inputs.git-address}} /opt/buildroot
+          cd /opt/buildroot
+      - name: Install packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libelf-dev
+      - name: Bulid
+        run: |
+          mkdir /opt/firmware
+          cd /opt/buildroot
+          git checkout ${{github.event.inputs.branches-tags}}
+          git pull origin ${{github.event.inputs.branches-tags}}
+          cp -rf /home/runner/work/redpill-load/redpill-load/buildroot/* .
+          echo '---start make---'
+          make ${{github.event.inputs.board}}_defconfig
+          make
+          cp -r /opt/buildroot/output/images /opt/firmware
+      - name: Upload buildroot-${{github.event.inputs.branches-tags}}-${{github.event.inputs.board}}
+        uses: actions/upload-artifact@v3
+        with:
+          name: buildroot-${{github.event.inputs.branches-tags}}-${{github.event.inputs.board}}
+          path: /opt/firmware

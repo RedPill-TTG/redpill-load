@@ -1,0 +1,18 @@
+{
+  "id": "jumkey.qjs.000",
+  "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-runtime-qjs/rpext-index.json",
+  "info": {
+    "name": "QuickJS Javascript Engine",
+    "description": "QuickJS Javascript Engine",
+    "author_url": "https://bellard.org/",
+    "packer_url": "https://bellard.org/quickjs/",
+    "help_url": "https://bellard.org/quickjs/quickjs.html"
+  },
+  "releases": {
+    "ds918p_42218": "https://github.com/jumkey/redpill-load/raw/develop/redpill-runtime-qjs/recipes/universal.json",
+    "ds920p_42218": "https://github.com/jumkey/redpill-load/raw/develop/redpill-runtime-qjs/recipes/universal.json",
+    "ds1621p_42218": "https://github.com/jumkey/redpill-load/raw/develop/redpill-runtime-qjs/recipes/universal.json",
+    "ds2422p_42218": "https://github.com/jumkey/redpill-load/raw/develop/redpill-runtime-qjs/recipes/universal.json",
+    "ds920p_42661": "https://github.com/jumkey/redpill-load/raw/develop/redpill-runtime-qjs/recipes/universal.json"
+  }
+}

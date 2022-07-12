@@ -1,0 +1,25 @@
+{
+  "files": [
+    {
+      "name": "install-acpid.sh",
+      "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-acpid/src/install-acpid.sh",
+      "sha256": "09fb68514f1798af0e3e1bbc51b3169bfc781538d0c6e60843b3b2fbe3a7a8c8",
+      "packed": false
+    },
+    {
+      "name": "acpid.tar.gz",
+      "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-acpid/acpid.tar.gz",
+      "sha256": "4a635465ff75a5481f2d9aa36fbcf26ff302dc29d2de586a14f1f5b50cf37e0c",
+      "packed": false
+    },
+    {
+      "name": "button.tgz",
+      "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-acpid/button.tgz",
+      "sha256": "e8f2eab72236c51c1f708171062e185ffb634872e159c7a74bbe7c3ce1d7b8c3",
+      "packed": false
+    }
+  ],
+  "scripts": {
+    "on_os_load": "install-acpid.sh"
+  }
+}
