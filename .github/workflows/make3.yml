@@ -134,6 +134,7 @@ jobs:
           # ----------
           cd ..
           bsdiff pat/zImage zImage_mod diff.bsp
+          sha256sum /opt/build/diff.bsp >> checksum.sha256
 
           echo '---copy file---'
           cp vmlinux /opt/dist
