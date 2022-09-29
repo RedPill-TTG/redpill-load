@@ -91,7 +91,7 @@ jobs:
           curl --insecure -L https://github.com/pocopico/tinycore-redpill/raw/main/tools/vmlinux-to-bzImage.sh -o vmlinux-to-bzImage.sh
 
           chmod +x kpatch 
-          ./kpatch vmlinux vmlinux-mod 
+          ./kpatch vmlinux vmlinux_mod.bin
           #vmlinux-to-bzImage.sh vmlinux-mod bzImage
 
           git clone https://github.com/kiler129/recreate-zImage.git
