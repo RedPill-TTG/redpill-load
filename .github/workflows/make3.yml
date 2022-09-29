@@ -1,4 +1,4 @@
-name: Make kernel bs patch for 7.1 using fabio kpatch
+name: Make kernel bs patch for 7.1 using fb kpatch
 
 on:
   workflow_dispatch:
@@ -145,5 +145,5 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
-          name: kernel bs patch for ${{ steps.bulid-bsp.outputs.patfile }}
+          name: kernel bs fb patch for ${{ steps.bulid-bsp.outputs.patfile }}
           path: /opt/dist
