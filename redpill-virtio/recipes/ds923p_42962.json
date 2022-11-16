@@ -1,0 +1,32 @@
+{
+  "mod_version": "v1",
+
+  "files": [
+    {
+      "name": "check-virtio.sh",
+      "url": "https://raw.githubusercontent.com/RedPill-TTG/redpill-virtio/master/src/check-virtio.sh",
+      "sha256": "cedced0bf29ff691ab6b4a7e2001efa40b2cc5fd31e3a9834d210a4b3408ded8",
+      "packed": false
+    },
+    {
+      "name": "virtio-4.4.180p.tgz",
+      "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-virtio/releases/v1.0.0/r1000/virtio-4.4.180p.tgz",
+      "sha256": "5ad8536b79066f9984b005b379f1afd322564bc4a682359b0ae57c7896d19b72",
+      "packed": true
+    }
+  ],
+
+  "kmods": {
+    "virtio.ko": "",
+    "virtio_ring.ko": "",
+    "virtio_mmio.ko": "",
+    "virtio_pci.ko": "",
+    "virtio_blk.ko": "",
+    "virtio_net.ko": "",
+    "virtio_scsi.ko": ""
+  },
+
+  "scripts": {
+    "check_kmod": "check-virtio.sh"
+  }
+}
