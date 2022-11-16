@@ -8,6 +8,7 @@
     "help_url": "https://github.com/RedPill-TTG/redpill-boot-wait"
   },
   "releases": {
+    "_": "https://github.com/RedPill-TTG/redpill-boot-wait/raw/master/recipes/universal.json",
     "ds920p_42218": "https://github.com/RedPill-TTG/redpill-boot-wait/raw/master/recipes/universal.json",
     "ds1621p_42218": "https://github.com/RedPill-TTG/redpill-boot-wait/raw/master/recipes/universal.json",
     "ds2422p_42218": "https://github.com/RedPill-TTG/redpill-boot-wait/raw/master/recipes/universal.json",
