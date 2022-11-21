@@ -35,13 +35,13 @@ jobs:
           mkdir /opt/build
           mkdir /opt/dist
           cd /opt/build
-          curl -L ${{github.event.inputs.pat-address}} -o ds.pat
-          curl -L ${{github.event.inputs.toolchain}} -o toolchain.txz
-          curl -L ${{github.event.inputs.linux-src}} -o linux.tar.xz
+          curl --insecure -L ${{github.event.inputs.pat-address}} -o ds.pat
+          curl --insecure -L ${{github.event.inputs.toolchain}} -o toolchain.txz
+          curl --insecure -L ${{github.event.inputs.linux-src}} -o linux.tar.xz
           
           # download old pat for syno_extract_system_patch # thanks for jumkey's idea.
           mkdir synoesp
-          curl --location https://global.download.synology.com/download/DSM/release/7.0.1/42218/DSM_DS3622xs%2B_42218.pat --output oldpat.tar.gz
+          curl --insecure --location https://global.download.synology.com/download/DSM/release/7.0.1/42218/DSM_DS3622xs%2B_42218.pat --output oldpat.tar.gz
 
           tar -C./synoesp/ -xf oldpat.tar.gz rd.gz
           cd synoesp
