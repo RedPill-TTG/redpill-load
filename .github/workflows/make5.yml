@@ -96,7 +96,7 @@ jobs:
 
           ls -ltr 
 
-          /opt/build/kpatch /opt/build/vmlinux /opt/build/vmlinux-mod 
+          ./kpatch /opt/build/vmlinux /opt/build/vmlinux-mod 
           #vmlinux-to-bzImage.sh vmlinux-mod bzImage
           git clone https://github.com/kiler129/recreate-zImage.git
           chmod +x recreate-zImage/rebuild_kernel.sh
