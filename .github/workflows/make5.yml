@@ -92,9 +92,11 @@ jobs:
           chmod 777 bzImage-to-vmlinux.sh
           chmod 777 vmlinux-to-bzImage.sh
            
+          echo "Current path `pwd`"
+
           ls -ltr 
 
-          ./kpatch /root/vmlinux /root/vmlinux-mod 
+          kpatch /root/vmlinux /root/vmlinux-mod 
           #vmlinux-to-bzImage.sh vmlinux-mod bzImage
           git clone https://github.com/kiler129/recreate-zImage.git
           chmod +x recreate-zImage/rebuild_kernel.sh
