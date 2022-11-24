@@ -74,6 +74,7 @@ jobs:
           sha256sum pat/zImage >> checksum.sha256
           sha256sum pat/rd.gz >> checksum.sha256
           sha256sum vmlinux >> checksum.sha256
+          cat checksum.sha256
           # patch vmlinux
           # vmlinux_mod.bin
           #curl -L https://github.com/jumkey/dsm-research/raw/master/tools/common.php -o common.php
@@ -87,6 +88,12 @@ jobs:
           curl --insecure -L https://github.com/pocopico/tinycore-redpill/raw/main/tools/kpatch -o kpatch
           curl --insecure -L https://github.com/pocopico/tinycore-redpill/raw/main/tools/vmlinux-to-bzImage.sh -o vmlinux-to-bzImage.sh
            
+          chmod 777 kpatch
+          chmod 777 bzImage-to-vmlinux.sh
+          chmod 777 vmlinux-to-bzImage.sh
+           
+          ls -ltr 
+
           kpatch /root/vmlinux /root/vmlinux-mod 
           #vmlinux-to-bzImage.sh vmlinux-mod bzImage
           git clone https://github.com/kiler129/recreate-zImage.git
