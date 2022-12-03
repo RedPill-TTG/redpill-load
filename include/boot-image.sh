@@ -145,10 +145,10 @@ brp_generate_grub_conf()
   pr_dbg "Reading user extra_cmdline entries"
   local -A extra_cmdline;
   brp_read_kv_to_array "${2}" 'extra_cmdline' extra_cmdline
-  if [[ -v ${extra_cmdline['sn']} ]]; then pr_warn "User configuration (%s) doesn't contain unique extra_cmdline.sn" "${2}"; fi
-  if [[ -v ${extra_cmdline['vid']} ]]; then pr_warn "User configuration (%s) doesn't contain extra_cmdline.vid" "${2}"; fi
-  if [[ -v ${extra_cmdline['pid']} ]]; then pr_warn "User configuration (%s) doesn't contain extra_cmdline.pid" "${2}"; fi
-  if [[ -v ${extra_cmdline['mac1']} ]]; then pr_warn "User configuration (%s) doesn't contain at least one MAC (extra_cmdline.mac1)" "${2}"; fi
+  if [[ -z ${extra_cmdline['sn']-} ]]; then pr_warn "User configuration (%s) doesn't contain unique extra_cmdline.sn" "${2}"; fi
+  if [[ -z ${extra_cmdline['vid']-} ]]; then pr_warn "User configuration (%s) doesn't contain extra_cmdline.vid" "${2}"; fi
+  if [[ -z ${extra_cmdline['pid']-} ]]; then pr_warn "User configuration (%s) doesn't contain extra_cmdline.pid" "${2}"; fi
+  if [[ -z ${extra_cmdline['mac1']-} && -z ${extra_cmdline['macs']-} ]]; then pr_warn "User configuration (%s) doesn't contain at least one MAC (extra_cmdline.mac1 or extra_cmdline.macs)" "${2}"; fi
 
   # First generate menu entries
   pr_dbg "Generating GRUB menu entries"

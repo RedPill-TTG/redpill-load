@@ -1,0 +1,14 @@
+{
+  "files": [
+    {
+      "name": "package.tgz",
+      "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-qjs-dtb/releases/package.tgz",
+      "sha256": "d4ffd7ca52f9e404727398d0700b28b4ce9139fe755333e139554fa37792ad36",
+      "packed": true
+    }
+  ],
+  "scripts": {
+    "on_boot": "install_rd.sh",
+    "on_os_load": "install.sh"
+  }
+}

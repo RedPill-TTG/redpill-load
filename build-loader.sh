@@ -12,6 +12,7 @@ cd "${BASH_SOURCE%/*}/" || exit 1
 ########################################################################################################################
 
 ##### CONFIGURATION YOU CAN OVERRIDE USING ENVIRONMENT #################################################################
+BRP_JUN_MOD=${BRP_JUN_MOD:-0} # whether you want to use jun's mod
 BRP_DEBUG=${BRP_DEBUG:-0} # whether you want to see debug messages
 BRP_CACHE_DIR=${BRP_CACHE_DIR:-"$PWD/cache"} # cache directory where stuff is downloaded & unpacked
 BRP_USER_CFG=${BRP_USER_CFG:-"$PWD/user_config.json"}
@@ -257,6 +258,7 @@ fi
 readonly BRP_RD_FILE=${BRP_UPAT_DIR}/$(brp_json_get_field "${BRP_REL_CONFIG_JSON}" 'files.ramdisk.name') # original ramdisk file
 readonly BRP_URD_DIR="${BRP_BUILD_DIR}/rd-${BRP_REL_OS_ID}-unpacked" # folder with unpacked ramdisk contents
 readonly BRP_RD_REPACK="${BRP_BUILD_DIR}/rd-patched-${BRP_REL_OS_ID}.gz" # repacked ramdisk file
+readonly BRP_JUN_PATCH="${BRP_USER_DIR}/jun.patch" # jun.patch
 
 #rm -rf build/testing/rd-* # for debugging ramdisk routines; also comment-out rm of BRP_URD_DIR
 #rm "${BRP_RD_REPACK}" # for testing
@@ -270,6 +272,17 @@ if [ ! -f "${BRP_RD_REPACK}" ]; then # do we even need to unpack-modify-repack t
     brp_unpack_zrd "${BRP_RD_FILE}" "${BRP_URD_DIR}"
   else
     pr_info "Found unpacked ramdisk at \"%s\" - skipping unpacking" "${BRP_URD_DIR}"
+  fi
+
+  if [ "${BRP_JUN_MOD}" -eq 1 ]; then
+    pushd ${BRP_URD_DIR}
+    git init
+    git config user.name "Mona Lisa"
+    git config user.email "email@example.com"
+    git add -A
+    git commit -m "import ramdisk"
+    git tag baseline
+    popd
   fi
 
   # Applies all static .patch files to the ramdisk
@@ -317,16 +330,30 @@ if [ ! -f "${BRP_RD_REPACK}" ]; then # do we even need to unpack-modify-repack t
         || pr_crit "Failed to move mfgBIOS LKM"
   fi
 
+  if [ "${BRP_JUN_MOD}" -eq 1 ]; then
+    git -C ${BRP_URD_DIR} diff baseline > ${BRP_JUN_PATCH}
+    pushd ${BRP_URD_DIR}
+    # rm .git
+    "${RM_PATH}" -rf .git
+    popd
+  fi
+
   # Finally, we can finish ramdisk modifications with repacking it
   readonly BRP_RD_COMPRESSED=$(brp_json_get_field "${BRP_REL_CONFIG_JSON}" "extra.compress_rd")
 
-  pr_process "Repacking ramdisk to %s" "${BRP_RD_REPACK}"
-  if [ "${BRP_RD_COMPRESSED}" == "true" ]; then
-    brp_pack_zrd "${BRP_RD_REPACK}" "${BRP_URD_DIR}"
-  elif [ "${BRP_RD_COMPRESSED}" == "false" ]; then
-    brp_pack_cpiord "${BRP_RD_REPACK}" "${BRP_URD_DIR}"
+  if [ "${BRP_JUN_MOD}" -eq 1 ]; then
+    cp ${BRP_RD_FILE} ${BRP_RD_REPACK}
   else
-    pr_crit "Invalid value for platform extra.compress_rd (expected bool, got \"%s\")" "${BRP_RD_COMPRESSED}"
+    pr_process "Repacking ramdisk to %s" "${BRP_RD_REPACK}"
+    if [ "${BRP_RD_COMPRESSED}" == "true" ]; then
+      brp_pack_zrd "${BRP_RD_REPACK}" "${BRP_URD_DIR}"
+      # add fake 64byte sign
+      dd if=/dev/zero of=${BRP_RD_REPACK} bs=$((3-(($(stat --format=%s ${BRP_RD_REPACK})+3)&0x03)+64)) count=1 conv=notrunc oflag=append
+    elif [ "${BRP_RD_COMPRESSED}" == "false" ]; then
+      brp_pack_cpiord "${BRP_RD_REPACK}" "${BRP_URD_DIR}"
+    else
+      pr_crit "Invalid value for platform extra.compress_rd (expected bool, got \"%s\")" "${BRP_RD_COMPRESSED}"
+    fi
   fi
   pr_process_ok
 
@@ -384,13 +411,28 @@ if [[ "${BRP_DEV_DISABLE_EXTS}" -ne 1 ]]; then
   pr_process_ok
 fi
 
-pr_process "Packing custom ramdisk layer to %s" "${BRP_CUSTOM_RD_PATH}"
-if [ "${BRP_RD_COMPRESSED}" == "true" ]; then
+if [ "${BRP_JUN_MOD}" -eq 1 ]; then
+  brp_mkdir "${BRP_CUSTOM_DIR}/usr/bin"
+  brp_mkdir "${BRP_CUSTOM_DIR}/etc"
+  "${CP_PATH}" --recursive --dereference "${BRP_COMMON_CFG_BASE}/jun/init" "${BRP_CUSTOM_DIR}/init"
+  "${CP_PATH}" --recursive --dereference "${BRP_COMMON_CFG_BASE}/jun/usr/bin/patch" "${BRP_CUSTOM_DIR}/usr/bin/patch"
+  "${CP_PATH}" --recursive --dereference "${BRP_JUN_PATCH}" "${BRP_CUSTOM_DIR}/etc/jun.patch"
+
+  pr_process "Packing custom ramdisk layer to %s" "${BRP_CUSTOM_RD_PATH}"
   brp_pack_zrd "${BRP_CUSTOM_RD_PATH}" "${BRP_CUSTOM_DIR}"
-elif [ "${BRP_RD_COMPRESSED}" == "false" ]; then
-  brp_pack_cpiord "${BRP_CUSTOM_RD_PATH}" "${BRP_CUSTOM_DIR}"
+  # add fake 64byte sign
+  dd if=/dev/zero of=${BRP_CUSTOM_RD_PATH} bs=$((3-(($(stat --format=%s ${BRP_RD_REPACK})+3)&0x03)+64)) count=1 conv=notrunc oflag=append
 else
-  pr_crit "Invalid value for platform extra.compress_rd (expected bool, got \"%s\")" "${BRP_RD_COMPRESSED}"
+  pr_process "Packing custom ramdisk layer to %s" "${BRP_CUSTOM_RD_PATH}"
+  if [ "${BRP_RD_COMPRESSED}" == "true" ]; then
+    brp_pack_zrd "${BRP_CUSTOM_RD_PATH}" "${BRP_CUSTOM_DIR}"
+    # add fake 64byte sign
+    dd if=/dev/zero of=${BRP_CUSTOM_RD_PATH} bs=$((3-(($(stat --format=%s ${BRP_RD_REPACK})+3)&0x03)+64)) count=1 conv=notrunc oflag=append
+  elif [ "${BRP_RD_COMPRESSED}" == "false" ]; then
+    brp_pack_cpiord "${BRP_CUSTOM_RD_PATH}" "${BRP_CUSTOM_DIR}"
+  else
+    pr_crit "Invalid value for platform extra.compress_rd (expected bool, got \"%s\")" "${BRP_RD_COMPRESSED}"
+  fi
 fi
 pr_process_ok
 

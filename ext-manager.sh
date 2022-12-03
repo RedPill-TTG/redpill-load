@@ -357,12 +357,16 @@ mrp_fetch_new_ext_recipe()
   local recipe_url;
   recipe_url=$(brp_json_get_field "${index_file}" "releases.${2}" 1)
   if [[ $? -ne 0 ]] || [[ "${recipe_url}" == 'null' ]]; then
-    pr_err "The extension %s was found. However, the extension index has no recipe for %s platform. It may not be" "${1}" "${2}"
-    pr_err "supported on that platform, or author didn't updated it for that platform yet. You can try running"
-    pr_err "\"%s update\" to refresh indexes for all extensions manually. Below are the currently known information about" "${MRP_SRC_NAME}"
-    pr_err "the extension stored locally:" 
-    mrp_show_ext_info "${1}"
-    return 1
+    pr_warn "Failed to get recipe for %s try fallback to \"_\"" "${2}"
+    recipe_url=$(brp_json_get_field "${index_file}" "releases._" 1)
+    if [[ $? -ne 0 ]] || [[ "${recipe_url}" == 'null' ]]; then
+      pr_err "The extension %s was found. However, the extension index has no recipe for %s platform. It may not be" "${1}" "${2}"
+      pr_err "supported on that platform, or author didn't updated it for that platform yet. You can try running"
+      pr_err "\"%s update\" to refresh indexes for all extensions manually. Below are the currently known information about" "${MRP_SRC_NAME}"
+      pr_err "the extension stored locally:"
+      mrp_show_ext_info "${1}"
+      return 1
+    fi
   fi
 
   local mrp_tmp_rcp="${RPT_EXTS_DIR}/_ext_new_rcp.tmp_json"

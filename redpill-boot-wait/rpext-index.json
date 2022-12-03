@@ -1,0 +1,25 @@
+{
+  "id": "thethorgroup.boot-wait",
+  "url": "https://github.com/jumkey/redpill-load/raw/develop/redpill-boot-wait/rpext-index.json",
+  "info": {
+    "name": "RedPill Bootwait",
+    "description": "Simple extension which stops the execution early waiting for the boot device to appear",
+    "packer_url": "https://github.com/RedPill-TTG/redpill-boot-wait",
+    "help_url": "https://github.com/RedPill-TTG/redpill-boot-wait"
+  },
+  "releases": {
+    "_": "https://github.com/RedPill-TTG/redpill-boot-wait/raw/master/recipes/universal.json",
+    "ds920p_42218": "https://github.com/RedPill-TTG/redpill-boot-wait/raw/master/recipes/universal.json",
+    "ds1621p_42218": "https://github.com/RedPill-TTG/redpill-boot-wait/raw/master/recipes/universal.json",
+    "ds2422p_42218": "https://github.com/RedPill-TTG/redpill-boot-wait/raw/master/recipes/universal.json",
+    "ds920p_42661": "https://github.com/RedPill-TTG/redpill-boot-wait/raw/master/recipes/universal.json",
+    "ds3617xs_42218": "https://github.com/RedPill-TTG/redpill-boot-wait/raw/master/recipes/universal.json",
+    "ds3622xsp_42218": "https://github.com/RedPill-TTG/redpill-boot-wait/raw/master/recipes/universal.json",
+    "ds3615xs_25556": "https://github.com/RedPill-TTG/redpill-boot-wait/raw/master/recipes/universal.json",
+    "ds3615xs_41222": "https://github.com/RedPill-TTG/redpill-boot-wait/raw/master/recipes/universal.json",
+    "ds3615xs_42218": "https://github.com/RedPill-TTG/redpill-boot-wait/raw/master/recipes/universal.json",
+    "ds918p_25556": "https://github.com/RedPill-TTG/redpill-boot-wait/raw/master/recipes/universal.json",
+    "ds918p_41890": "https://github.com/RedPill-TTG/redpill-boot-wait/raw/master/recipes/universal.json",
+    "ds918p_42218": "https://github.com/RedPill-TTG/redpill-boot-wait/raw/master/recipes/universal.json"
+  }
+}
